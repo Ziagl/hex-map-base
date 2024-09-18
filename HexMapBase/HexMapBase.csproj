@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <RootNamespace>com.hexagonsimulations.Geometry.Hex</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AssemblyTitle>HexMapBase</AssemblyTitle>
+    <Description>A hexagon grid implementation of http://www.redblobgames.com/grids/hexagons/.</Description>
+    <Company>Hexagon Simulations</Company>
+    <Product>HexMapBase</Product>
+    <Copyright>Hexagon Simulations</Copyright>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MSTest.TestAdapter" Version="3.6.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.6.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+  </ItemGroup>
+  <PropertyGroup>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>$(AssemblyName)</PackageId>
+    <Version>0.0.1</Version>
+    <Title>Hexagon Map Library</Title>
+    <Authors>Werner Ziegelwanger</Authors>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/Ziagl/hex-map-base</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>hexagon geometry map tile 2d library</PackageTags>
+  </PropertyGroup>
+  <Target Name="AfterBuild" Condition=" '$(Configuration)' == 'Release'">
+    <Exec Command="nuget pack $(ProjectFileName) -Prop Configuration=Release">
+    </Exec>
+  </Target>
+</Project>
