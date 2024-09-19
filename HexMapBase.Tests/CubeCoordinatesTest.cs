@@ -3,7 +3,7 @@
 namespace com.hexagonsimulations.Geometry.HexGridTest
 {
     [TestFixture]
-	public class CubicHexCoordTest
+	public class CubeCoordinatesTest
 	{
 		#region Constructors
 		
@@ -133,7 +133,7 @@ namespace com.hexagonsimulations.Geometry.HexGridTest
 		[Test]
 		public void Diagonal()
 		{
-			CubeCoordinates cubic = new CubeCoordinates( 1, 2, 3 ).Diagonal( DiagonalEnum.ESE );
+            CubeCoordinates cubic = new CubeCoordinates( 1, 2, 3 ).Diagonal(Hex.Diagonal.ESE );
 
 			Assert.That( cubic.x, Is.EqualTo( 2 ) );
 			Assert.That( cubic.y, Is.EqualTo( 0 ) );
@@ -146,13 +146,13 @@ namespace com.hexagonsimulations.Geometry.HexGridTest
 			CubeCoordinates cubic = new CubeCoordinates( 1, 2, 3 );
 			CubeCoordinates[] diagonals = cubic.Diagonals();
 
-			Assert.That( diagonals, Is.EquivalentTo( new CubeCoordinates[ 6 ] {
-				cubic.Diagonal( DiagonalEnum.ESE ),
-				cubic.Diagonal( DiagonalEnum.S   ),
-				cubic.Diagonal( DiagonalEnum.WSW ),
-				cubic.Diagonal( DiagonalEnum.WNW ),
-				cubic.Diagonal( DiagonalEnum.N   ),
-				cubic.Diagonal( DiagonalEnum.ENE )
+            Assert.That( diagonals, Is.EquivalentTo( new CubeCoordinates[ 6 ] {
+				cubic.Diagonal( Hex.Diagonal.ESE ),
+				cubic.Diagonal( Hex.Diagonal.S   ),
+				cubic.Diagonal( Hex.Diagonal.WSW ),
+				cubic.Diagonal( Hex.Diagonal.WNW ),
+				cubic.Diagonal( Hex.Diagonal.N   ),
+				cubic.Diagonal( Hex.Diagonal.ENE )
 			} ) );
 		}
 		
@@ -160,7 +160,7 @@ namespace com.hexagonsimulations.Geometry.HexGridTest
 		public void DistanceTo()
 		{
 			CubeCoordinates cubic1 = new CubeCoordinates( 0, 0, 0 );
-			CubeCoordinates cubic2 = cubic1.Neighbor( DirectionEnum.E ).Neighbor( DirectionEnum.SE );
+			CubeCoordinates cubic2 = cubic1.Neighbor( Direction.E ).Neighbor( Direction.SE );
 			int distance = cubic1.DistanceTo( cubic2 );
 
 			Assert.That( distance, Is.EqualTo( 2 ) );
@@ -184,7 +184,7 @@ namespace com.hexagonsimulations.Geometry.HexGridTest
 		[Test]
 		public void Neighbor()
 		{
-			CubeCoordinates cubic = new CubeCoordinates( 1, 2, 3 ).Neighbor( DirectionEnum.E );
+			CubeCoordinates cubic = new CubeCoordinates( 1, 2, 3 ).Neighbor( Direction.E );
 
 			Assert.That( cubic.x, Is.EqualTo( 2 ) );
 			Assert.That( cubic.y, Is.EqualTo( 1 ) );
@@ -198,12 +198,12 @@ namespace com.hexagonsimulations.Geometry.HexGridTest
 			CubeCoordinates[] neighbors = cubic.Neighbors();
 
 			Assert.That( neighbors, Is.EquivalentTo( new CubeCoordinates[ 6 ] {
-				cubic.Neighbor( DirectionEnum.E  ),
-				cubic.Neighbor( DirectionEnum.SE ),
-				cubic.Neighbor( DirectionEnum.SW ),
-				cubic.Neighbor( DirectionEnum.W  ),
-				cubic.Neighbor( DirectionEnum.NW ),
-				cubic.Neighbor( DirectionEnum.NE )
+				cubic.Neighbor( Direction.E  ),
+				cubic.Neighbor( Direction.SE ),
+				cubic.Neighbor( Direction.SW ),
+				cubic.Neighbor( Direction.W  ),
+				cubic.Neighbor( Direction.NW ),
+				cubic.Neighbor( Direction.NE )
 			} ) );
 		}
 		
@@ -211,7 +211,7 @@ namespace com.hexagonsimulations.Geometry.HexGridTest
 		public void RingAround()
 		{
 			CubeCoordinates cubic = new CubeCoordinates( 1, 0, -1 );
-			CubeCoordinates[] ring = cubic.RingAround( 2, DirectionEnum.W );
+			CubeCoordinates[] ring = cubic.RingAround( 2, Direction.W );
 
 			Assert.That( ring, Is.EquivalentTo( new CubeCoordinates[ 12 ] {
 				new CubeCoordinates( -1,  2, -1 ),
@@ -246,7 +246,7 @@ namespace com.hexagonsimulations.Geometry.HexGridTest
 		[Test]
 		public void Scale()
 		{
-			CubeCoordinates cubic = CubeCoordinates.DirectionDiff( DirectionEnum.SE );
+			CubeCoordinates cubic = CubeCoordinates.DirectionDiff( Direction.SE );
 			CubeCoordinates scaled = cubic.Scale( 3 );
 
 			Assert.That( scaled.x, Is.EqualTo( 3 * cubic.x ) );
@@ -258,7 +258,7 @@ namespace com.hexagonsimulations.Geometry.HexGridTest
 		public void SpiralAroundInward()
 		{
 			CubeCoordinates cubic = new CubeCoordinates( 1, 0, -1 );
-			CubeCoordinates[] spiral = cubic.SpiralAroundOutward( 2, DirectionEnum.W );
+			CubeCoordinates[] spiral = cubic.SpiralAroundOutward( 2, Direction.W );
 
 			Assert.That( spiral, Is.EquivalentTo( new CubeCoordinates[ 19 ] {
 				// Distance 2
@@ -290,7 +290,7 @@ namespace com.hexagonsimulations.Geometry.HexGridTest
 		public void SpiralAroundOutward()
 		{
 			CubeCoordinates cubic = new CubeCoordinates( 1, 0, -1 );
-			CubeCoordinates[] spiral = cubic.SpiralAroundOutward( 2, DirectionEnum.W );
+			CubeCoordinates[] spiral = cubic.SpiralAroundOutward( 2, Direction.W );
 
 			Assert.That( spiral, Is.EquivalentTo( new CubeCoordinates[ 19 ] {
 				// Center
@@ -356,7 +356,7 @@ namespace com.hexagonsimulations.Geometry.HexGridTest
 		[Test]
 		public void StaticDiagonalDiff()
 		{
-			CubeCoordinates cubic = CubeCoordinates.DiagonalDiff( DiagonalEnum.ESE );
+            CubeCoordinates cubic = CubeCoordinates.DiagonalDiff(Hex.Diagonal.ESE );
 
 			Assert.That( cubic.x, Is.EqualTo(  1 ) );
 			Assert.That( cubic.y, Is.EqualTo( -2 ) );
@@ -366,7 +366,7 @@ namespace com.hexagonsimulations.Geometry.HexGridTest
 		[Test]
 		public void StaticDirectionDiff()
 		{
-			CubeCoordinates cubic = CubeCoordinates.DirectionDiff( DirectionEnum.E );
+			CubeCoordinates cubic = CubeCoordinates.DirectionDiff( Direction.E );
 
 			Assert.That( cubic.x, Is.EqualTo(  1 ) );
 			Assert.That( cubic.y, Is.EqualTo( -1 ) );
@@ -399,7 +399,7 @@ namespace com.hexagonsimulations.Geometry.HexGridTest
 		public void StaticRing()
 		{
 			CubeCoordinates cubic = new CubeCoordinates( 1, 0, -1 );
-			CubeCoordinates[] ring = CubeCoordinates.Ring( cubic, 2, DirectionEnum.W );
+			CubeCoordinates[] ring = CubeCoordinates.Ring( cubic, 2, Direction.W );
 
 			Assert.That( ring, Is.EquivalentTo( new CubeCoordinates[ 12 ] {
 				new CubeCoordinates( -1,  2, -1 ),
@@ -428,7 +428,7 @@ namespace com.hexagonsimulations.Geometry.HexGridTest
 		public void StaticSpiralInward()
 		{
 			CubeCoordinates cubic = new CubeCoordinates( 1, 0, -1 );
-			CubeCoordinates[] spiral = CubeCoordinates.SpiralOutward( cubic, 2, DirectionEnum.W );
+			CubeCoordinates[] spiral = CubeCoordinates.SpiralOutward( cubic, 2, Direction.W );
 
 			Assert.That( spiral, Is.EquivalentTo( new CubeCoordinates[ 19 ] {
 				// Distance 2
@@ -460,7 +460,7 @@ namespace com.hexagonsimulations.Geometry.HexGridTest
 		public void StaticSpiralOutward()
 		{
 			CubeCoordinates cubic = new CubeCoordinates( 1, 0, -1 );
-			CubeCoordinates[] spiral = CubeCoordinates.SpiralOutward( cubic, 2, DirectionEnum.W );
+			CubeCoordinates[] spiral = CubeCoordinates.SpiralOutward( cubic, 2, Direction.W );
 
 			Assert.That( spiral, Is.EquivalentTo( new CubeCoordinates[ 19 ] {
 				// Center

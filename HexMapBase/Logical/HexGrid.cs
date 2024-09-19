@@ -148,7 +148,7 @@ namespace com.hexagonsimulations.Geometry.Hex
 		/// <returns>A DirectionEnum representing the direction of the triangle that the point is 
 		/// contained by within the hex (relative to the center of the hex).</returns>
 		public 
-		DirectionEnum
+		Direction
 		PointToDirectionInHex( Vec2D point )
 		{
 			AxialCoordinates axial = PointToCubic( point ).ToAxial();
@@ -166,11 +166,11 @@ namespace com.hexagonsimulations.Geometry.Hex
 				fromTopLeft.y % Slice.y
 			);
 
-			ParityEnum parity = ParityEnum.Even;
+			Parity parity = Parity.Even;
 			if ( ( ( hSlice & 1 ) + ( vSlice & 1 ) ) == 1 )
 			{
 				// One of the two dimensions is odd, otherwise parity is even by default.
-				parity = ParityEnum.Odd;
+				parity = Parity.Odd;
 			}
 			
 			//
@@ -188,8 +188,8 @@ namespace com.hexagonsimulations.Geometry.Hex
 
 			// Compute and return the triangle by which the point is contained.
 			bool isInvalid = false;
-			DirectionEnum direction = DirectionEnum.E;
-			TriangleEnum triangle = WhichTriangle( withinSlice, parity );
+			Direction direction = Direction.E;
+			Triangle triangle = WhichTriangle( withinSlice, parity );
 
 
 			if ( hSlice == 0 )
@@ -197,9 +197,9 @@ namespace com.hexagonsimulations.Geometry.Hex
 				switch ( vSlice )
 				{
 					case 0:
-					if ( triangle == TriangleEnum.Bottom )
+					if ( triangle == Triangle.Bottom )
 					{
-						direction = DirectionEnum.NW;
+						direction = Direction.NW;
 					}
 					else
 					{
@@ -208,17 +208,17 @@ namespace com.hexagonsimulations.Geometry.Hex
 					break;
 					
 					case 1:
-					direction = ( triangle == TriangleEnum.Top ) ? DirectionEnum.NW : DirectionEnum.W;
+					direction = ( triangle == Triangle.Top ) ? Direction.NW : Direction.W;
 					break;
 
 					case 2:
-					direction = ( triangle == TriangleEnum.Top ) ? DirectionEnum.W  : DirectionEnum.SW;
+					direction = ( triangle == Triangle.Top ) ? Direction.W  : Direction.SW;
 					break;
 
 					case 3:
-					if ( triangle == TriangleEnum.Top )
+					if ( triangle == Triangle.Top )
 					{
-						direction = DirectionEnum.SW;
+						direction = Direction.SW;
 					}
 					else
 					{
@@ -236,9 +236,9 @@ namespace com.hexagonsimulations.Geometry.Hex
 				switch ( vSlice )
 				{
 					case 0:
-					if ( triangle == TriangleEnum.Bottom )
+					if ( triangle == Triangle.Bottom )
 					{
-						direction = DirectionEnum.NE;
+						direction = Direction.NE;
 					}
 					else
 					{
@@ -247,17 +247,17 @@ namespace com.hexagonsimulations.Geometry.Hex
 					break;
 
 					case 1:
-					direction = ( triangle == TriangleEnum.Top ) ? DirectionEnum.NE : DirectionEnum.E;
+					direction = ( triangle == Triangle.Top ) ? Direction.NE : Direction.E;
 					break;
 
 					case 2:
-					direction = ( triangle == TriangleEnum.Top ) ? DirectionEnum.E  : DirectionEnum.SE;
+					direction = ( triangle == Triangle.Top ) ? Direction.E  : Direction.SE;
 					break;
 
 					case 3:
-					if ( triangle == TriangleEnum.Top )
+					if ( triangle == Triangle.Top )
 					{
-						direction = DirectionEnum.SE;
+						direction = Direction.SE;
 					}
 					else
 					{
@@ -301,12 +301,12 @@ namespace com.hexagonsimulations.Geometry.Hex
 		/// bottom-left to top-right (EVEN).</param>
 		/// <returns>A TriangleEnum representing the triangle (within the current slice, either 
 		/// top or bottom, that the point belongs to).</returns>
-		private TriangleEnum WhichTriangle( Vec2D withinSlice, ParityEnum parity )
+		private Triangle WhichTriangle( Vec2D withinSlice, Parity parity )
 		{
 			float xFraction = withinSlice.x / Slice.x;
 			float yBorder = 0f;
 
-			if ( parity == ParityEnum.Even )
+			if ( parity == Parity.Even )
 			{
 				// When parity is even, the border is bottom-left to top-right.
 				yBorder = Slice.y * xFraction;
@@ -317,7 +317,7 @@ namespace com.hexagonsimulations.Geometry.Hex
 				yBorder = Slice.y * ( 1f - xFraction );
 			}
 
-			return ( withinSlice.y < yBorder ) ? TriangleEnum.Top : TriangleEnum.Bottom;
+			return ( withinSlice.y < yBorder ) ? Triangle.Top : Triangle.Bottom;
 		}
 
 		#endregion

@@ -6,7 +6,7 @@
     /// it represents (bisecting that face and pointing outward directly through its middle).
     /// Note that cardinal directions are used here to make these easier to distinguish.
     /// </summary>
-    public enum DirectionEnum : int
+    public enum Direction : int
 	{
 		E  = 0, 
 		SE = 1, 

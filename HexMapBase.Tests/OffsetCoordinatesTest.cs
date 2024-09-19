@@ -3,7 +3,7 @@
 namespace com.hexagonsimulations.Geometry.HexGridTest
 {
     [TestFixture]
-	public class OffsetHexCoordTest
+	public class OffsetCoordinatesTest
 	{
 		#region Properties
 
@@ -20,11 +20,11 @@ namespace com.hexagonsimulations.Geometry.HexGridTest
 		[Test]
 		public void PropertyRowParity()
 		{
-			ParityEnum odd  = new OffsetCoordinates( 2, 3 ).RowParity;
-			ParityEnum even = new OffsetCoordinates( 1, 2 ).RowParity;
+			Parity odd  = new OffsetCoordinates( 2, 3 ).RowParity;
+			Parity even = new OffsetCoordinates( 1, 2 ).RowParity;
 			
-			Assert.That( odd,  Is.EqualTo( ParityEnum.Odd  ) );
-			Assert.That( even, Is.EqualTo( ParityEnum.Even ) );
+			Assert.That( odd,  Is.EqualTo( Parity.Odd  ) );
+			Assert.That( even, Is.EqualTo( Parity.Even ) );
 		}
 
 		#endregion

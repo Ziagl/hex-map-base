@@ -1,6 +1,6 @@
 ﻿namespace com.hexagonsimulations.Geometry.Hex
 {
-    public enum TriangleEnum
+    public enum Triangle
 	{
 		Top, Bottom
 	}

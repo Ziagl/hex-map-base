@@ -135,25 +135,25 @@ namespace com.hexagonsimulations.Geometry.HexGridTest
 				new Vec2D(	hexPos.x + offset,	hexPos.y  -1f * offset + 0.01f	)  // 5b
 			};
 
-			DirectionEnum[] results = new DirectionEnum[ 12 ];
+			Direction[] results = new Direction[ 12 ];
 			for ( int i = 0; i < points.Length; i++ )
 			{
 				results[ i ] = grid.PointToDirectionInHex( points[ i ] );
 			}
 
-			Assert.That( results, Is.EquivalentTo( new DirectionEnum[ 12 ] {
-				DirectionEnum.E,  // 0a
-				DirectionEnum.E,  // 0b 
-				DirectionEnum.SE, // 1a 
-				DirectionEnum.SE, // 1b
-				DirectionEnum.SW, // 2a
-				DirectionEnum.SW, // 2b
-				DirectionEnum.W,  // 3a
-				DirectionEnum.W,  // 3b
-				DirectionEnum.NW, // 4a
-				DirectionEnum.NW, // 4b
-				DirectionEnum.NE, // 5a
-				DirectionEnum.NE  // 5b
+			Assert.That( results, Is.EquivalentTo( new Direction[ 12 ] {
+				Direction.E,  // 0a
+				Direction.E,  // 0b 
+				Direction.SE, // 1a 
+				Direction.SE, // 1b
+				Direction.SW, // 2a
+				Direction.SW, // 2b
+				Direction.W,  // 3a
+				Direction.W,  // 3b
+				Direction.NW, // 4a
+				Direction.NW, // 4b
+				Direction.NE, // 5a
+				Direction.NE  // 5b
 			} ) );
 		}
 

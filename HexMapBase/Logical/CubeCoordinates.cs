@@ -230,7 +230,7 @@ namespace com.hexagonsimulations.Geometry.Hex
 		/// direction.</returns>
 		public 
 		CubeCoordinates 
-		Diagonal( DiagonalEnum direction )
+		Diagonal( Diagonal direction )
 		{
 			return this + DIAGONALS[ (int)direction ];
 		}
@@ -247,12 +247,12 @@ namespace com.hexagonsimulations.Geometry.Hex
 		Diagonals()
 		{
 			return new CubeCoordinates[ 6 ] {
-				this + DIAGONALS[ (int)DiagonalEnum.ESE ], 
-				this + DIAGONALS[ (int)DiagonalEnum.S   ], 
-				this + DIAGONALS[ (int)DiagonalEnum.WSW ], 
-				this + DIAGONALS[ (int)DiagonalEnum.WNW ], 
-				this + DIAGONALS[ (int)DiagonalEnum.N   ], 
-				this + DIAGONALS[ (int)DiagonalEnum.ENE ]
+				this + DIAGONALS[ (int)Hex.Diagonal.ESE ], 
+				this + DIAGONALS[ (int)Hex.Diagonal.S   ], 
+				this + DIAGONALS[ (int)Hex.Diagonal.WSW ], 
+				this + DIAGONALS[ (int)Hex.Diagonal.WNW ], 
+				this + DIAGONALS[ (int)Hex.Diagonal.N   ], 
+				this + DIAGONALS[ (int)Hex.Diagonal.ENE ]
 			};
 		}
 
@@ -294,7 +294,7 @@ namespace com.hexagonsimulations.Geometry.Hex
 		/// </returns>
 		public 
 		CubeCoordinates 
-		Neighbor( DirectionEnum direction )
+		Neighbor( Direction direction )
 		{
 			return this + DIRECTIONS[ (int)direction ];
 		}
@@ -311,12 +311,12 @@ namespace com.hexagonsimulations.Geometry.Hex
 		Neighbors()
 		{
 			return new CubeCoordinates[ 6 ] {
-				this + DIRECTIONS[ (int)DirectionEnum.E  ], 
-				this + DIRECTIONS[ (int)DirectionEnum.SE ], 
-				this + DIRECTIONS[ (int)DirectionEnum.SW ], 
-				this + DIRECTIONS[ (int)DirectionEnum.W  ], 
-				this + DIRECTIONS[ (int)DirectionEnum.NW ], 
-				this + DIRECTIONS[ (int)DirectionEnum.NE ]
+				this + DIRECTIONS[ (int)Direction.E  ], 
+				this + DIRECTIONS[ (int)Direction.SE ], 
+				this + DIRECTIONS[ (int)Direction.SW ], 
+				this + DIRECTIONS[ (int)Direction.W  ], 
+				this + DIRECTIONS[ (int)Direction.NW ], 
+				this + DIRECTIONS[ (int)Direction.NE ]
 			};
 		}
 		
@@ -333,7 +333,7 @@ namespace com.hexagonsimulations.Geometry.Hex
 		/// <returns>An array of CubicHexCoords ordered as a ring.</returns>
 		public 
 		CubeCoordinates[] 
-		RingAround( int range, DirectionEnum startDirection = DirectionEnum.E )
+		RingAround( int range, Direction startDirection = Direction.E )
 		{
 			return CubeCoordinates.Ring( this, range, startDirection );
 		}
@@ -352,7 +352,7 @@ namespace com.hexagonsimulations.Geometry.Hex
 		/// </returns>
 		public 
 		CubeCoordinates 
-		RotateAroundOther( CubeCoordinates center, RotationEnum rotation )
+		RotateAroundOther( CubeCoordinates center, Rotation rotation )
 		{
 			return CubeCoordinates.Rotate( center, this, rotation );
 		}
@@ -371,7 +371,7 @@ namespace com.hexagonsimulations.Geometry.Hex
 		/// </returns>
 		public 
 		CubeCoordinates 
-		RotateOtherAround( CubeCoordinates toRotate, RotationEnum rotation )
+		RotateOtherAround( CubeCoordinates toRotate, Rotation rotation )
 		{
 			return CubeCoordinates.Rotate( this, toRotate, rotation );
 		}
@@ -405,7 +405,7 @@ namespace com.hexagonsimulations.Geometry.Hex
 		/// and proceeding clockwise until it reaches the outside of the spiral.</returns>
 		public 
 		CubeCoordinates[] 
-		SpiralAroundInward( int range, DirectionEnum startDirection = DirectionEnum.E )
+		SpiralAroundInward( int range, Direction startDirection = Direction.E )
 		{
 			return CubeCoordinates.SpiralInward( this, range, startDirection );
 		}
@@ -426,7 +426,7 @@ namespace com.hexagonsimulations.Geometry.Hex
 		/// <returns></returns>
 		public 
 		CubeCoordinates[] 
-		SpiralAroundOutward( int range, DirectionEnum startDirection = DirectionEnum.E )
+		SpiralAroundOutward( int range, Direction startDirection = Direction.E )
 		{
 			return CubeCoordinates.SpiralOutward( this, range, startDirection );
 		}
@@ -492,7 +492,7 @@ namespace com.hexagonsimulations.Geometry.Hex
 		/// the given diagonal direction.</returns>
 		public static 
 		CubeCoordinates 
-		DiagonalDiff( DiagonalEnum direction )
+		DiagonalDiff( Diagonal direction )
 		{
 			return DIAGONALS[ (int)direction ];
 		}
@@ -507,7 +507,7 @@ namespace com.hexagonsimulations.Geometry.Hex
 		/// the given direction.</returns>
 		public static 
 		CubeCoordinates 
-		DirectionDiff( DirectionEnum direction )
+		DirectionDiff( Direction direction )
 		{
 			return DIRECTIONS[ (int)direction ];
 		}
@@ -593,7 +593,7 @@ namespace com.hexagonsimulations.Geometry.Hex
 		/// <returns>An array of CubicHexCoords ordered as a ring.</returns>
 		public static 
 		CubeCoordinates[] 
-		Ring( CubeCoordinates center, int range, DirectionEnum startDirection = DirectionEnum.E )
+		Ring( CubeCoordinates center, int range, Direction startDirection = Direction.E )
 		{
 			if ( range <= 0 )
 			{
@@ -617,7 +617,7 @@ namespace com.hexagonsimulations.Geometry.Hex
 				for ( int j = 0; j < range; j++ )
 				{
 					result[ index++ ] = cube;
-					cube = cube.Neighbor( (DirectionEnum)neighborDirection );
+					cube = cube.Neighbor( (Direction)neighborDirection );
 				}
 			}
 
@@ -640,7 +640,7 @@ namespace com.hexagonsimulations.Geometry.Hex
 		/// </returns>
 		public static 
 		CubeCoordinates 
-		Rotate( CubeCoordinates center, CubeCoordinates toRotate, RotationEnum rotation )
+		Rotate( CubeCoordinates center, CubeCoordinates toRotate, Rotation rotation )
 		{
 			throw new NotImplementedException( "Feature not suppored yet!" );
 		}
@@ -661,7 +661,7 @@ namespace com.hexagonsimulations.Geometry.Hex
 		/// and proceeding clockwise until it reaches the outside of the spiral.</returns>
 		public static 
 		CubeCoordinates[] 
-		SpiralInward( CubeCoordinates center, int range, DirectionEnum startDirection = DirectionEnum.E )
+		SpiralInward( CubeCoordinates center, int range, Direction startDirection = Direction.E )
 		{
 			if ( range <= 0 )
 			{
@@ -708,7 +708,7 @@ namespace com.hexagonsimulations.Geometry.Hex
 		/// and proceeding clockwise until it reaches the center of the spiral.</returns>
 		public static 
 		CubeCoordinates[] 
-		SpiralOutward( CubeCoordinates center, int range, DirectionEnum startDirection = DirectionEnum.E )
+		SpiralOutward( CubeCoordinates center, int range, Direction startDirection = Direction.E )
 		{
 			if ( range <= 0 )
 			{

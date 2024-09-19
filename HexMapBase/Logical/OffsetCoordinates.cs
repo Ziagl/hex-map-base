@@ -25,13 +25,13 @@
 		/// <summary>
 		/// Return whether or not this hex belongs to an odd-numbered row.
 		/// </summary>
-		public bool IsOddRow { get { return ( this.RowParity == ParityEnum.Odd ); } }
+		public bool IsOddRow { get { return ( this.RowParity == Parity.Odd ); } }
 
 		
 		/// <summary>
 		/// Return the row parity of the hex (whether its row number is even or odd).
 		/// </summary>
-		public ParityEnum RowParity { get { return (ParityEnum)( this.r & 1 ); } }
+		public Parity RowParity { get { return (Parity)( this.r & 1 ); } }
 
 		#endregion
 		

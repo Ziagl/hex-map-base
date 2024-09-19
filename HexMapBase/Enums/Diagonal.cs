@@ -5,7 +5,7 @@
     /// a central pointy-topped hex. Note that cardinal directions are used here to make these 
     /// easier to distinguish.
     /// </summary>
-    public enum DiagonalEnum : int
+    public enum Diagonal : int
 	{
 		ESE = 0,
 		S   = 1,

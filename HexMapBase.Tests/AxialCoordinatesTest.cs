@@ -3,7 +3,7 @@
 namespace com.hexagonsimulations.Geometry.HexGridTest
 {
     [TestFixture]
-	public class AxialHexCoordTest
+	public class AxialCoordinatesTest
 	{
 		#region Constructors
 

@@ -6,7 +6,7 @@
     /// 60 through 300 degrees is represented in either direction (0 and 360 are not as they
     /// represent no rotation).
     /// </summary>
-    public enum RotationEnum : int
+    public enum Rotation : int
 	{
 		CW_60,
 		CW_120,
