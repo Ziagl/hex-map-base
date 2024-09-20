@@ -2,6 +2,7 @@
 {
     public enum Triangle
 	{
-		Top, Bottom
+		Top,
+		Bottom,
 	}
 }

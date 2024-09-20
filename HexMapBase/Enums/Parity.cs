@@ -6,7 +6,7 @@
     /// </summary>
     public enum Parity : int
 	{
-		Even = 0,
-		Odd  = 1
+		Even,
+		Odd,
 	}
 }
