@@ -31,7 +31,7 @@
   <PropertyGroup>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>$(AssemblyName)</PackageId>
-    <Version>0.1.1</Version>
+    <Version>0.1.2</Version>
     <Title>Hexagon Map Library</Title>
     <Authors>Werner Ziegelwanger</Authors>
     <PackageIcon>icon.png</PackageIcon>

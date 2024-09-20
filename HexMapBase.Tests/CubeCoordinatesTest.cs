@@ -116,11 +116,11 @@ namespace com.hexagonsimulations.Geometry.HexGridTest
         [Test]
         public void Diagonal()
         {
-            CubeCoordinates cubic = new CubeCoordinates(1, 2, 3).Diagonal(Hex.Diagonal.ESE);
+            CubeCoordinates cubic = new CubeCoordinates(0, 1, -1).Diagonal(Hex.Diagonal.ESE);
 
-            Assert.That(cubic.q, Is.EqualTo(2));
-            Assert.That(cubic.r, Is.EqualTo(0));
-            Assert.That(cubic.s, Is.EqualTo(4));
+            Assert.That(cubic.q, Is.EqualTo(1));
+            Assert.That(cubic.r, Is.EqualTo(2));
+            Assert.That(cubic.s, Is.EqualTo(-3));
         }
 
         [Test]
@@ -179,11 +179,11 @@ namespace com.hexagonsimulations.Geometry.HexGridTest
         [Test]
         public void Neighbor()
         {
-            CubeCoordinates cubic = new CubeCoordinates(1, 2, 3).Neighbor(Direction.E);
+            CubeCoordinates cubic = new CubeCoordinates(0, 1, -1).Neighbor(Direction.E);
 
-            Assert.That(cubic.q, Is.EqualTo(2));
+            Assert.That(cubic.q, Is.EqualTo(1));
             Assert.That(cubic.r, Is.EqualTo(1));
-            Assert.That(cubic.s, Is.EqualTo(3));
+            Assert.That(cubic.s, Is.EqualTo(-2));
         }
 
         [Test]
@@ -373,8 +373,8 @@ namespace com.hexagonsimulations.Geometry.HexGridTest
             CubeCoordinates cubic = CubeCoordinates.DiagonalDiff(Hex.Diagonal.ESE);
 
             Assert.That(cubic.q, Is.EqualTo(1));
-            Assert.That(cubic.r, Is.EqualTo(-2));
-            Assert.That(cubic.s, Is.EqualTo(1));
+            Assert.That(cubic.r, Is.EqualTo(1));
+            Assert.That(cubic.s, Is.EqualTo(-2));
         }
 
         [Test]
@@ -383,8 +383,8 @@ namespace com.hexagonsimulations.Geometry.HexGridTest
             CubeCoordinates cubic = CubeCoordinates.DirectionDiff(Direction.E);
 
             Assert.That(cubic.q, Is.EqualTo(1));
-            Assert.That(cubic.r, Is.EqualTo(-1));
-            Assert.That(cubic.s, Is.EqualTo(0));
+            Assert.That(cubic.r, Is.EqualTo(0));
+            Assert.That(cubic.s, Is.EqualTo(-1));
         }
 
         [Test]

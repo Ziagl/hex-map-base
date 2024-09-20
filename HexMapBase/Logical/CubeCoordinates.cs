@@ -24,22 +24,22 @@ namespace com.hexagonsimulations.Geometry.Hex
 
         private static readonly CubeCoordinates[] DIAGONALS =
         {
-            new CubeCoordinates(1, -2, 1),
-            new CubeCoordinates(-1, -1, 2),
-            new CubeCoordinates(-2, 1, 1),
-            new CubeCoordinates(-1, 2, -1),
             new CubeCoordinates(1, 1, -2),
+            new CubeCoordinates(-1, 2, -1),
+            new CubeCoordinates(-2, 1, 1),
+            new CubeCoordinates(-1, -1, 2),
+            new CubeCoordinates(1, -2, 1),
             new CubeCoordinates(2, -1, -1),
         };
 
         private static readonly CubeCoordinates[] DIRECTIONS =
         {
-            new CubeCoordinates(1, -1, 0),
-            new CubeCoordinates(0, -1, 1),
-            new CubeCoordinates(-1, 0, 1),
-            new CubeCoordinates(-1, 1, 0),
-            new CubeCoordinates(0, 1, -1),
             new CubeCoordinates(1, 0, -1),
+            new CubeCoordinates(0, 1, -1),
+            new CubeCoordinates(-1, 1, 0),
+            new CubeCoordinates(-1, 0, 1),
+            new CubeCoordinates(0, -1, 1),
+            new CubeCoordinates(1, -1, 0),
         };
 
         /// <summary>
