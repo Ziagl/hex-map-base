@@ -6,7 +6,7 @@ namespace com.hexagonsimulations.Geometry.HexGridTest
     public class CubeCoordinatesTest
     {
         [Test]
-        public void ConstructorXYZ()
+        public void ConstructorQRS()
         {
             CubeCoordinates cubic = new CubeCoordinates(1, 2, 3);
 
@@ -37,7 +37,7 @@ namespace com.hexagonsimulations.Geometry.HexGridTest
         [Test]
         public void ToOffset()
         {
-            OffsetCoordinates offset = new CubeCoordinates(0, -2, 2).ToOffset();
+            OffsetCoordinates offset = new CubeCoordinates(0, 2, -2).ToOffset();
 
             Assert.That(offset.x, Is.EqualTo(1));
             Assert.That(offset.y, Is.EqualTo(2));

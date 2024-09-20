@@ -82,8 +82,8 @@ namespace com.hexagonsimulations.Geometry.Hex
         /// <returns>An OffsetCoordinates representing the hex.</returns>
         public OffsetCoordinates ToOffset()
         {
-            int x = this.q + (this.s - (this.s & 1)) / 2;
-            int y = this.s;
+            int x = this.q + (this.r - (this.r & 1)) / 2;
+            int y = this.r;
 
             return new OffsetCoordinates(x, y);
         }
