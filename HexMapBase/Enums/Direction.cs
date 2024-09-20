@@ -1,4 +1,4 @@
-﻿namespace com.hexagonsimulations.Geometry.Hex
+﻿namespace com.hexagonsimulations.Geometry.Hex.Enums
 {
     /// <summary>
     /// Represents directionality in the context of a pointy-topped hexagon's faces, where each

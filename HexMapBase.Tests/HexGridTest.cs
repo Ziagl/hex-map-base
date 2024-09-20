@@ -1,4 +1,5 @@
 ﻿using com.hexagonsimulations.Geometry.Hex;
+using com.hexagonsimulations.Geometry.Hex.Enums;
 
 namespace com.hexagonsimulations.Geometry.HexGridTest
 {

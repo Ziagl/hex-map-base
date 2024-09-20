@@ -1,4 +1,4 @@
-﻿namespace com.hexagonsimulations.Geometry.Hex
+﻿namespace com.hexagonsimulations.Geometry.Hex.Enums
 {
     /// <summary>
     /// Represents a rotation either clockwise or counter-clockwise around a central point. 

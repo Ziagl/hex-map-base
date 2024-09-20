@@ -1,4 +1,5 @@
 ﻿using com.hexagonsimulations.Geometry.Hex;
+using com.hexagonsimulations.Geometry.Hex.Enums;
 
 namespace com.hexagonsimulations.Geometry.HexGridTest
 {
@@ -116,7 +117,7 @@ namespace com.hexagonsimulations.Geometry.HexGridTest
         [Test]
         public void Diagonal()
         {
-            CubeCoordinates cubic = new CubeCoordinates(0, 1, -1).Diagonal(Hex.Diagonal.ESE);
+            CubeCoordinates cubic = new CubeCoordinates(0, 1, -1).Diagonal(Hex.Enums.Diagonal.ESE);
 
             Assert.That(cubic.q, Is.EqualTo(1));
             Assert.That(cubic.r, Is.EqualTo(2));
@@ -134,12 +135,12 @@ namespace com.hexagonsimulations.Geometry.HexGridTest
                 Is.EquivalentTo(
                     new CubeCoordinates[6]
                     {
-                        cubic.Diagonal(Hex.Diagonal.ESE),
-                        cubic.Diagonal(Hex.Diagonal.S),
-                        cubic.Diagonal(Hex.Diagonal.WSW),
-                        cubic.Diagonal(Hex.Diagonal.WNW),
-                        cubic.Diagonal(Hex.Diagonal.N),
-                        cubic.Diagonal(Hex.Diagonal.ENE),
+                        cubic.Diagonal(Hex.Enums.Diagonal.ESE),
+                        cubic.Diagonal(Hex.Enums.Diagonal.S),
+                        cubic.Diagonal(Hex.Enums.Diagonal.WSW),
+                        cubic.Diagonal(Hex.Enums.Diagonal.WNW),
+                        cubic.Diagonal(Hex.Enums.Diagonal.N),
+                        cubic.Diagonal(Hex.Enums.Diagonal.ENE),
                     }
                 )
             );
@@ -184,6 +185,12 @@ namespace com.hexagonsimulations.Geometry.HexGridTest
             Assert.That(cubic.q, Is.EqualTo(1));
             Assert.That(cubic.r, Is.EqualTo(1));
             Assert.That(cubic.s, Is.EqualTo(-2));
+
+            cubic = new CubeCoordinates(0, 0, 0).Neighbor(Direction.NE);
+
+            Assert.That(cubic.q, Is.EqualTo(1));
+            Assert.That(cubic.r, Is.EqualTo(-1));
+            Assert.That(cubic.s, Is.EqualTo(0));
         }
 
         [Test]
@@ -370,7 +377,7 @@ namespace com.hexagonsimulations.Geometry.HexGridTest
         [Test]
         public void StaticDiagonalDiff()
         {
-            CubeCoordinates cubic = CubeCoordinates.DiagonalDiff(Hex.Diagonal.ESE);
+            CubeCoordinates cubic = CubeCoordinates.DiagonalDiff(Hex.Enums.Diagonal.ESE);
 
             Assert.That(cubic.q, Is.EqualTo(1));
             Assert.That(cubic.r, Is.EqualTo(1));

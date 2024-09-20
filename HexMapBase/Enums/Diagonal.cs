@@ -1,4 +1,4 @@
-﻿namespace com.hexagonsimulations.Geometry.Hex
+﻿namespace com.hexagonsimulations.Geometry.Hex.Enums
 {
     /// <summary>
     /// Represents a diagonal hex (see http://www.redblobgames.com/grids/hexagons/), relative to

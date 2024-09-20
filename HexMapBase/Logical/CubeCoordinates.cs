@@ -1,4 +1,5 @@
-﻿using System;
+﻿using com.hexagonsimulations.Geometry.Hex.Enums;
+using System;
 
 namespace com.hexagonsimulations.Geometry.Hex
 {
@@ -22,25 +23,47 @@ namespace com.hexagonsimulations.Geometry.Hex
         public int r;
         public int s;
 
-        private static readonly CubeCoordinates[] DIAGONALS =
+        private static CubeCoordinates GetDirection(Direction direction)
         {
-            new CubeCoordinates(1, 1, -2),
-            new CubeCoordinates(-1, 2, -1),
-            new CubeCoordinates(-2, 1, 1),
-            new CubeCoordinates(-1, -1, 2),
-            new CubeCoordinates(1, -2, 1),
-            new CubeCoordinates(2, -1, -1),
-        };
+            switch(direction)
+            {
+                case Direction.E:
+                    return new CubeCoordinates(1, 0, -1);
+                case Direction.SE:
+                    return new CubeCoordinates(0, 1, -1);
+                case Direction.SW:
+                    return new CubeCoordinates(-1, 1, 0);
+                case Direction.W:
+                    return new CubeCoordinates(-1, 0, 1);
+                case Direction.NW:
+                    return new CubeCoordinates(0, -1, 1);
+                case Direction.NE:
+                    return new CubeCoordinates(1, -1, 0);
+                default:
+                    throw new ArgumentOutOfRangeException("direction", direction, null);
+            }
+        }
 
-        private static readonly CubeCoordinates[] DIRECTIONS =
+        private static CubeCoordinates GetDiagonal(Diagonal diagonal)
         {
-            new CubeCoordinates(1, 0, -1),
-            new CubeCoordinates(0, 1, -1),
-            new CubeCoordinates(-1, 1, 0),
-            new CubeCoordinates(-1, 0, 1),
-            new CubeCoordinates(0, -1, 1),
-            new CubeCoordinates(1, -1, 0),
-        };
+            switch(diagonal)
+            {
+                case Enums.Diagonal.ESE:
+                    return new CubeCoordinates(1, 1, -2);
+                case Enums.Diagonal.S:
+                    return new CubeCoordinates(-1, 2, -1);
+                case Enums.Diagonal.WSW:
+                    return new CubeCoordinates(-2, 1, 1);
+                case Enums.Diagonal.WNW:
+                    return new CubeCoordinates(-1, -1, 2);
+                case Enums.Diagonal.N:
+                    return new CubeCoordinates(1, -2, 1);
+                case Enums.Diagonal.ENE:
+                    return new CubeCoordinates(2, -1, -1);
+                default:
+                    throw new ArgumentOutOfRangeException("diagonal", diagonal, null);
+            }
+        }
 
         /// <summary>
         /// Creates new CubeCoordinaes given the coordinates q, r and s.
@@ -191,12 +214,12 @@ namespace com.hexagonsimulations.Geometry.Hex
         /// Returns a CubeCoordinates representing the diagonal of this hex in the given diagonal
         /// direction.
         /// </summary>
-        /// <param name="direction">The diagonal direction of the requested neighbor.</param>
+        /// <param name="diagonal">The diagonal direction of the requested neighbor.</param>
         /// <returns>A CubeCoordinate representing the diagonal of this hex in the given diagonal
         /// direction.</returns>
-        public CubeCoordinates Diagonal(Diagonal direction)
+        public CubeCoordinates Diagonal(Diagonal diagonal)
         {
-            return this + DIAGONALS[(int)direction];
+            return this + GetDiagonal(diagonal);
         }
 
         /// <summary>
@@ -209,12 +232,12 @@ namespace com.hexagonsimulations.Geometry.Hex
         {
             return new CubeCoordinates[6]
             {
-                this + DIAGONALS[(int)Hex.Diagonal.ESE],
-                this + DIAGONALS[(int)Hex.Diagonal.S],
-                this + DIAGONALS[(int)Hex.Diagonal.WSW],
-                this + DIAGONALS[(int)Hex.Diagonal.WNW],
-                this + DIAGONALS[(int)Hex.Diagonal.N],
-                this + DIAGONALS[(int)Hex.Diagonal.ENE],
+                this + GetDiagonal(Enums.Diagonal.ESE),
+                this + GetDiagonal(Enums.Diagonal.S),
+                this + GetDiagonal(Enums.Diagonal.WSW),
+                this + GetDiagonal(Enums.Diagonal.WNW),
+                this + GetDiagonal(Enums.Diagonal.N),
+                this + GetDiagonal(Enums.Diagonal.ENE),
             };
         }
 
@@ -249,7 +272,7 @@ namespace com.hexagonsimulations.Geometry.Hex
         /// </returns>
         public CubeCoordinates Neighbor(Direction direction)
         {
-            return this + DIRECTIONS[(int)direction];
+            return this + GetDirection(direction);
         }
 
         /// <summary>
@@ -262,12 +285,12 @@ namespace com.hexagonsimulations.Geometry.Hex
         {
             return new CubeCoordinates[6]
             {
-                this + DIRECTIONS[(int)Direction.E],
-                this + DIRECTIONS[(int)Direction.SE],
-                this + DIRECTIONS[(int)Direction.SW],
-                this + DIRECTIONS[(int)Direction.W],
-                this + DIRECTIONS[(int)Direction.NW],
-                this + DIRECTIONS[(int)Direction.NE],
+                this + GetDirection(Direction.E),
+                this + GetDirection(Direction.SE),
+                this + GetDirection(Direction.SW),
+                this + GetDirection(Direction.W),
+                this + GetDirection(Direction.NW),
+                this + GetDirection(Direction.NE),
             };
         }
 
@@ -422,9 +445,9 @@ namespace com.hexagonsimulations.Geometry.Hex
         /// <param name="direction">The diagonal direction to return a diff for.</param>
         /// <returns>A CubeCoordinate representing the diff between some hex and its diagonal in
         /// the given diagonal direction.</returns>
-        public static CubeCoordinates DiagonalDiff(Diagonal direction)
+        public static CubeCoordinates DiagonalDiff(Diagonal diagonal)
         {
-            return DIAGONALS[(int)direction];
+            return GetDiagonal(diagonal);
         }
 
         /// <summary>
@@ -436,7 +459,7 @@ namespace com.hexagonsimulations.Geometry.Hex
         /// the given direction.</returns>
         public static CubeCoordinates DirectionDiff(Direction direction)
         {
-            return DIRECTIONS[(int)direction];
+            return GetDirection(direction);
         }
 
         /// <remarks>THIS IS NOT YET IMPLEMENTED!</remarks>
@@ -518,7 +541,7 @@ namespace com.hexagonsimulations.Geometry.Hex
 
             CubeCoordinates[] result = new CubeCoordinates[6 * range];
 
-            CubeCoordinates cube = center + DIRECTIONS[(int)startDirection].Scale(range);
+            CubeCoordinates cube = center + GetDirection(startDirection).Scale(range);
 
             int[] directions = new int[6];
             for (int i = 0; i < 6; i++)

@@ -1,4 +1,4 @@
-﻿namespace com.hexagonsimulations.Geometry.Hex
+﻿namespace com.hexagonsimulations.Geometry.Hex.Enums
 {
     public enum Triangle
 	{

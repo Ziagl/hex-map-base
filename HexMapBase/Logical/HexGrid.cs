@@ -1,4 +1,5 @@
-﻿using System;
+﻿using com.hexagonsimulations.Geometry.Hex.Enums;
+using System;
 
 namespace com.hexagonsimulations.Geometry.Hex
 {
