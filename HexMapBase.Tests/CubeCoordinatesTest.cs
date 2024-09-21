@@ -272,7 +272,7 @@ namespace com.hexagonsimulations.Geometry.HexGridTest
         public void SpiralAroundInward()
         {
             CubeCoordinates cubic = new CubeCoordinates(1, 0, -1);
-            CubeCoordinates[] spiral = cubic.SpiralAroundOutward(2, Direction.W);
+            CubeCoordinates[] spiral = cubic.SpiralAroundInward(2, Direction.W);
 
             Assert.That(
                 spiral,
