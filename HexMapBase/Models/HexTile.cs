@@ -16,7 +16,7 @@ public class HexTile
     /// Check if this HexTile is equal to an arbitrary object.
     /// </summary>
     /// <returns>Whether or not this HexTile and the given object are equal.</returns>
-    public override bool Equals(object obj)
+    public sealed override bool Equals(object obj)
     {
         if (obj == null)
         {
@@ -37,7 +37,7 @@ public class HexTile
     /// Get a hash reflecting the contents of the CubeCoordinates.
     /// </summary>
     /// <returns>An integer hash code reflecting the contents of the CubeCoordinates.</returns>
-    public override int GetHashCode()
+    public sealed override int GetHashCode()
     {
         int hash = 17;
         hash = hash * 23 + Coordinates.q.GetHashCode();
