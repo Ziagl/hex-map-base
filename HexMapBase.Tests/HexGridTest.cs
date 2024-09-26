@@ -1,7 +1,7 @@
 ﻿using com.hexagonsimulations.Geometry.Hex;
 using com.hexagonsimulations.Geometry.Hex.Enums;
 
-namespace com.hexagonsimulations.Geometry.HexGridTest
+namespace com.hexagonsimulations.Geometry.Test
 {
     [TestFixture]
     public class HexGridTest
@@ -158,6 +158,15 @@ namespace com.hexagonsimulations.Geometry.HexGridTest
                     }
                 )
             );
+        }
+
+        [Test]
+        public void InitializeGrid()
+        {
+            var grid = Enumerable.Repeat(new HexTile(), 9).ToList();
+            HexGrid.InitializeGrid(grid, 3, 3);
+            Assert.IsTrue(grid[1].Coordinates == new CubeCoordinates(1, 0,-1));
+            Assert.IsTrue(grid[^1].Coordinates == new CubeCoordinates(1, 2,-3));
         }
     }
 }

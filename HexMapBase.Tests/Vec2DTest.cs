@@ -1,6 +1,6 @@
 ﻿using com.hexagonsimulations.Geometry.Hex;
 
-namespace com.hexagonsimulations.Geometry.HexGridTest
+namespace com.hexagonsimulations.Geometry.Test
 {
     [TestFixture]
     public class Vec2DTest

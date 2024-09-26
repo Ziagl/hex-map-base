@@ -1,5 +1,6 @@
 ﻿using com.hexagonsimulations.Geometry.Hex.Enums;
 using System;
+using System.Collections.Generic;
 
 namespace com.hexagonsimulations.Geometry.Hex
 {
@@ -252,6 +253,28 @@ namespace com.hexagonsimulations.Geometry.Hex
             else
             {
                 return direction;
+            }
+        }
+
+        /// <summary>
+        /// Initializes a tilemap grid of 2D dimensions with a list of hex tiles.
+        /// It sets CubicCoordinates for each tile in the grid starting 0,0 as 0,0,0
+        /// in left upper corner.
+        /// </summary>
+        /// <param name="grid">List of HexTiles of a grid.</param>
+        /// <param name="rows">Number of grid rows.</param>
+        /// <param name="columns">Number of grid columns.</param>
+        public static void InitializeGrid(List<HexTile> grid, int rows, int columns)
+        {
+            for (int column = 0; column < columns; ++column)
+            {
+                for (int row = 0; row < rows; ++row)
+                {
+                    grid[row * columns + column] = new HexTile
+                    {
+                        Coordinates = new OffsetCoordinates(column, row).ToCubic(),
+                    };
+                }
             }
         }
 

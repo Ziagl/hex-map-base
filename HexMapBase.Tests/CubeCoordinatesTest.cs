@@ -1,7 +1,7 @@
 ﻿using com.hexagonsimulations.Geometry.Hex;
 using com.hexagonsimulations.Geometry.Hex.Enums;
 
-namespace com.hexagonsimulations.Geometry.HexGridTest
+namespace com.hexagonsimulations.Geometry.Test
 {
     [TestFixture]
     public class CubeCoordinatesTest
