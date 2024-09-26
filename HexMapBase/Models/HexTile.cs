@@ -34,6 +34,19 @@ public class HexTile
     }
 
     /// <summary>
+    /// Get a hash reflecting the contents of the CubeCoordinates.
+    /// </summary>
+    /// <returns>An integer hash code reflecting the contents of the CubeCoordinates.</returns>
+    public override int GetHashCode()
+    {
+        int hash = 17;
+        hash = hash * 23 + Coordinates.q.GetHashCode();
+        hash = hash * 23 + Coordinates.r.GetHashCode();
+        hash = hash * 23 + Coordinates.s.GetHashCode();
+        return hash;
+    }
+
+    /// <summary>
     /// Get all neighbor tiles of this tile. This function also respects
     /// grid boundaries.
     /// </summary>

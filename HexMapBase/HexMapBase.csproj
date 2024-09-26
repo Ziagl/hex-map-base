@@ -9,11 +9,22 @@
     <Company>Hexagon Simulations</Company>
     <Product>HexMapBase</Product>
     <Copyright>Hexagon Simulations</Copyright>
+	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	<PackageId>$(AssemblyName)</PackageId>
+	<Version>0.1.5</Version>
+	<Title>Hexagon Map Library</Title>
+	<Authors>Werner Ziegelwanger</Authors>
+	<PackageIcon>icon.png</PackageIcon>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
+	<RepositoryUrl>https://github.com/Ziagl/hex-map-base</RepositoryUrl>
+	<RepositoryType>git</RepositoryType>
+	<PackageTags>hexagon geometry map tile 2d library</PackageTags>
+	<PackageProjectUrl>https://hexagon-simulations.com/</PackageProjectUrl>
+	<PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="icon.png" />
-  </ItemGroup>
-  <ItemGroup>
+	<Content Include="icon.png" />
+	<None Include="..\LICENSE" Pack="true" PackagePath="\" />
     <None Include="..\icon.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
@@ -22,25 +33,10 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="MSTest.TestAdapter" Version="3.6.0" />
+	<PackageReference Include="MSTest.TestAdapter" Version="3.6.0" />
     <PackageReference Include="MSTest.TestFramework" Version="3.6.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
-  <PropertyGroup>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PackageId>$(AssemblyName)</PackageId>
-    <Version>0.1.4</Version>
-    <Title>Hexagon Map Library</Title>
-    <Authors>Werner Ziegelwanger</Authors>
-    <PackageIcon>icon.png</PackageIcon>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/Ziagl/hex-map-base</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <PackageTags>hexagon geometry map tile 2d library</PackageTags>
-    <PackageProjectUrl>https://hexagon-simulations.com/</PackageProjectUrl>
-  </PropertyGroup>
   <Target Name="AfterBuild" Condition=" '$(Configuration)' == 'Release'">
     <Exec Command="nuget pack $(ProjectFileName) -Prop Configuration=Release">
     </Exec>
