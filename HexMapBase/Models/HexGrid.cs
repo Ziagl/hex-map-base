@@ -270,10 +270,7 @@ namespace com.hexagonsimulations.Geometry.Hex
             {
                 for (int row = 0; row < rows; ++row)
                 {
-                    grid[row * columns + column] = new HexTile
-                    {
-                        Coordinates = new OffsetCoordinates(column, row).ToCubic(),
-                    };
+                    grid[row * columns + column].Coordinates = new OffsetCoordinates(column, row).ToCubic();
                 }
             }
         }
