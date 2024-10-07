@@ -9,8 +9,7 @@ namespace com.hexagonsimulations.Geometry.Test
         public void Neighbors()
         {
             HexTile tile = new() { Coordinates = new CubeCoordinates(1, 1,-2) };
-            var grid = Enumerable.Repeat(new HexTile(), 9).ToList();
-            HexGrid.InitializeGrid(grid, 3, 3);
+            var grid = HexGrid.InitializeGrid<HexTile>(3, 3);
             var neighbors = tile.Neighbors(grid, 3, 3);
             Assert.That(
                 neighbors,

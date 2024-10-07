@@ -163,8 +163,7 @@ namespace com.hexagonsimulations.Geometry.Test
         [Test]
         public void InitializeGrid()
         {
-            var grid = Enumerable.Repeat(new HexTile(), 9).ToList();
-            HexGrid.InitializeGrid(grid, 3, 3);
+            var grid = HexGrid.InitializeGrid<HexTile>(3, 3);
             Assert.IsTrue(grid[1].Coordinates == new CubeCoordinates(1, 0,-1));
             Assert.IsTrue(grid[^1].Coordinates == new CubeCoordinates(1, 2,-3));
         }

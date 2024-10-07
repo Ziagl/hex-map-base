@@ -261,18 +261,25 @@ namespace com.hexagonsimulations.Geometry.Hex
         /// It sets CubicCoordinates for each tile in the grid starting 0,0 as 0,0,0
         /// in left upper corner.
         /// </summary>
-        /// <param name="grid">List of HexTiles of a grid.</param>
+        /// <typeparam name="T">The type of hex tile, which must inherit from HexTile.</typeparam>
         /// <param name="rows">Number of grid rows.</param>
         /// <param name="columns">Number of grid columns.</param>
-        public static void InitializeGrid(List<HexTile> grid, int rows, int columns)
+        /// <returns>A list of hex tiles of type T.</returns>
+        public static List<T> InitializeGrid<T>(int rows, int columns) where T : HexTile, new()
         {
+            var list = new List<T>();
             for (int column = 0; column < columns; ++column)
             {
                 for (int row = 0; row < rows; ++row)
                 {
-                    grid[row * columns + column].Coordinates = new OffsetCoordinates(column, row).ToCubic();
+                    var tile = new T
+                    {
+                        Coordinates = new OffsetCoordinates(row, column).ToCubic()
+                    };
+                    list.Add(tile);
                 }
             }
+            return list;
         }
 
         /// <summary>
