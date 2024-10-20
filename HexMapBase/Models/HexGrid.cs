@@ -268,13 +268,13 @@ namespace com.hexagonsimulations.Geometry.Hex
         public static List<T> InitializeGrid<T>(int rows, int columns) where T : HexTile, new()
         {
             var list = new List<T>();
-            for (int column = 0; column < columns; ++column)
+            for (int row = 0; row < rows; ++row)
             {
-                for (int row = 0; row < rows; ++row)
+                for (int column = 0; column < columns; ++column)
                 {
                     var tile = new T
                     {
-                        Coordinates = new OffsetCoordinates(row, column).ToCubic()
+                        Coordinates = new OffsetCoordinates(column, row).ToCubic()
                     };
                     list.Add(tile);
                 }

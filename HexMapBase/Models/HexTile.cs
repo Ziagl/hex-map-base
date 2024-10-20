@@ -58,9 +58,9 @@ public class HexTile
     {
         List<HexTile> neighbors = new();
 
-        foreach (var neighborCoordinates in this.Coordinates.Neighbors())
+        foreach (var neighborCoordinate in Coordinates.Neighbors())
         {
-            var coord = neighborCoordinates.ToOffset();
+            var coord = neighborCoordinate.ToOffset();
             if (coord.x < 0 || coord.x >= columns || coord.y < 0 || coord.y >= rows)
             {
                 continue;
