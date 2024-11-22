@@ -91,27 +91,27 @@ namespace com.hexagonsimulations.Geometry.Test
             CubeCoordinates[] area = CubeCoordinates.Area(cubic, 2);
 
             // Center
-            Assert.Contains(new CubeCoordinates(1, 0, -1), area);
+            Assert.That(area, Contains.Item(new CubeCoordinates(1, 0, -1)));
             // Distance 1
-            Assert.Contains(new CubeCoordinates(1, 1, -2), area);
-            Assert.Contains(new CubeCoordinates(2, 0, -2), area);
-            Assert.Contains(new CubeCoordinates(0, 1, -1), area);
-            Assert.Contains(new CubeCoordinates(2, -1, -1), area);
-            Assert.Contains(new CubeCoordinates(1, -1, 0), area);
-            Assert.Contains(new CubeCoordinates(0, 0, 0), area);
+            Assert.That(area, Contains.Item(new CubeCoordinates(1, 1, -2)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(2, 0, -2)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(0, 1, -1)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(2, -1, -1)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(1, -1, 0)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(0, 0, 0)));
             // Distance 2
-            Assert.Contains(new CubeCoordinates(-1, 2, -1), area);
-            Assert.Contains(new CubeCoordinates(0, 2, -2), area);
-            Assert.Contains(new CubeCoordinates(1, 2, -3), area);
-            Assert.Contains(new CubeCoordinates(2, 1, -3), area);
-            Assert.Contains(new CubeCoordinates(3, 0, -3), area);
-            Assert.Contains(new CubeCoordinates(3, -1, -2), area);
-            Assert.Contains(new CubeCoordinates(3, -2, -1), area);
-            Assert.Contains(new CubeCoordinates(2, -2, 0), area);
-            Assert.Contains(new CubeCoordinates(1, -2, 1), area);
-            Assert.Contains(new CubeCoordinates(0, -1, 1), area);
-            Assert.Contains(new CubeCoordinates(-1, 0, 1), area);
-            Assert.Contains(new CubeCoordinates(-1, 1, 0), area);
+            Assert.That(area, Contains.Item(new CubeCoordinates(-1, 2, -1)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(0, 2, -2)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(1, 2, -3)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(2, 1, -3)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(3, 0, -3)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(3, -1, -2)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(3, -2, -1)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(2, -2, 0)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(1, -2, 1)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(0, -1, 1)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(-1, 0, 1)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(-1, 1, 0)));
         }
 
         [Test]
@@ -351,27 +351,27 @@ namespace com.hexagonsimulations.Geometry.Test
             CubeCoordinates[] area = CubeCoordinates.Area(cubic, 2);
 
             // Center
-            Assert.Contains(new CubeCoordinates(1, 0, -1), area);
+            Assert.That(area, Contains.Item(new CubeCoordinates(1, 0, -1)));
             // Distance 1
-            Assert.Contains(new CubeCoordinates(0, 1, -1), area);
-            Assert.Contains(new CubeCoordinates(1, 1, -2), area);
-            Assert.Contains(new CubeCoordinates(2, 0, -2), area);
-            Assert.Contains(new CubeCoordinates(2, -1, -1), area);
-            Assert.Contains(new CubeCoordinates(1, -1, 0), area);
-            Assert.Contains(new CubeCoordinates(0, 0, 0), area);
+            Assert.That(area, Contains.Item(new CubeCoordinates(0, 1, -1)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(1, 1, -2)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(2, 0, -2)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(2, -1, -1)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(1, -1, 0)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(0, 0, 0)));
             // Distance 2
-            Assert.Contains(new CubeCoordinates(-1, 2, -1), area);
-            Assert.Contains(new CubeCoordinates(0, 2, -2), area);
-            Assert.Contains(new CubeCoordinates(1, 2, -3), area);
-            Assert.Contains(new CubeCoordinates(2, 1, -3), area);
-            Assert.Contains(new CubeCoordinates(3, 0, -3), area);
-            Assert.Contains(new CubeCoordinates(3, -1, -2), area);
-            Assert.Contains(new CubeCoordinates(3, -2, -1), area);
-            Assert.Contains(new CubeCoordinates(2, -2, 0), area);
-            Assert.Contains(new CubeCoordinates(1, -2, 1), area);
-            Assert.Contains(new CubeCoordinates(0, -1, 1), area);
-            Assert.Contains(new CubeCoordinates(-1, 0, 1), area);
-            Assert.Contains(new CubeCoordinates(-1, 1, 0), area);
+            Assert.That(area, Contains.Item(new CubeCoordinates(-1, 2, -1)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(0, 2, -2)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(1, 2, -3)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(2, 1, -3)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(3, 0, -3)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(3, -1, -2)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(3, -2, -1)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(2, -2, 0)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(1, -2, 1)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(0, -1, 1)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(-1, 0, 1)));
+            Assert.That(area, Contains.Item(new CubeCoordinates(-1, 1, 0)));
         }
 
         [Test]
