@@ -4,7 +4,7 @@ VisualStudioVersion = 17.11.35303.130
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HexMapBase", "HexMapBase\HexMapBase.csproj", "{730CE1A8-6F93-424D-AAF1-057182BC21EF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HexMapBase.Tests", "HexMapBase.Tests\HexMapBase.Tests.csproj", "{7D6844B1-7982-4727-BF28-7E0147345F2F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexMapBase.Tests", "HexMapBase.Tests\HexMapBase.Tests.csproj", "{98BB2184-5F0C-48DF-8D11-A75C61924E53}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,10 +16,10 @@ Global
 		{730CE1A8-6F93-424D-AAF1-057182BC21EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{730CE1A8-6F93-424D-AAF1-057182BC21EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{730CE1A8-6F93-424D-AAF1-057182BC21EF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7D6844B1-7982-4727-BF28-7E0147345F2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7D6844B1-7982-4727-BF28-7E0147345F2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7D6844B1-7982-4727-BF28-7E0147345F2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7D6844B1-7982-4727-BF28-7E0147345F2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98BB2184-5F0C-48DF-8D11-A75C61924E53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98BB2184-5F0C-48DF-8D11-A75C61924E53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98BB2184-5F0C-48DF-8D11-A75C61924E53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98BB2184-5F0C-48DF-8D11-A75C61924E53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace com.hexagonsimulations.Geometry.Hex;
+namespace com.hexagonsimulations.HexMapBase.Geometry.Hex;
 
 /// <summary>
 /// This is the base class for all hex tiles used in other libraries.

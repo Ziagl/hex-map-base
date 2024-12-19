@@ -1,8 +1,8 @@
-﻿using com.hexagonsimulations.Geometry.Hex.Enums;
+﻿using com.hexagonsimulations.HexMapBase.Geometry.Hex.Enums;
 using System;
 using System.Collections.Generic;
 
-namespace com.hexagonsimulations.Geometry.Hex
+namespace com.hexagonsimulations.HexMapBase.Geometry.Hex
 {
     /// <summary>
     /// A logical hex-grid implementation based on Amit Patel's examples at

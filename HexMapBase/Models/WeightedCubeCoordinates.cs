@@ -1,4 +1,4 @@
-﻿namespace com.hexagonsimulations.Geometry.Hex.Models;
+﻿namespace com.hexagonsimulations.HexMapBase.Geometry.Hex.Models;
 
 /// <summary>
 /// Weighted coordinates for path finding and movement.

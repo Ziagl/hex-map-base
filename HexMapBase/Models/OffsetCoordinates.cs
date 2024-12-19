@@ -1,6 +1,6 @@
-﻿using com.hexagonsimulations.Geometry.Hex.Enums;
+﻿using com.hexagonsimulations.HexMapBase.Geometry.Hex.Enums;
 
-namespace com.hexagonsimulations.Geometry.Hex
+namespace com.hexagonsimulations.HexMapBase.Geometry.Hex
 {
     /// <summary>
     /// Represents the position of a hex within a hex grid using the Odd-Row offset grid layout

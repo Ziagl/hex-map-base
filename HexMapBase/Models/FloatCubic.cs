@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace com.hexagonsimulations.Geometry.Hex
+namespace com.hexagonsimulations.HexMapBase.Geometry.Hex
 {
     /// <summary>
     /// FloatCubic represents a pseudo-position on the hex grid. It does not directly represent

@@ -1,4 +1,4 @@
-﻿namespace com.hexagonsimulations.Geometry.Hex
+﻿namespace com.hexagonsimulations.HexMapBase.Geometry.Hex
 {
     /// <summary>
     /// Represents the position of a hex within a hex grid using axial coordinates (q = East,

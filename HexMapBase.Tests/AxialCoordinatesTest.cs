@@ -1,74 +1,68 @@
-﻿using com.hexagonsimulations.Geometry.Hex;
+﻿using com.hexagonsimulations.HexMapBase.Geometry.Hex;
 
-namespace com.hexagonsimulations.Geometry.Test
+namespace com.hexagonsimulations.HexMapBase.Tests
 {
-    [TestFixture]
-    public class AxialCoordinatesTest
+    [TestClass]
+    public sealed class AxialCoordinatesTest
     {
-        [Test]
+        [TestMethod]
         public void ConstructorQR()
         {
             AxialCoordinates axial = new AxialCoordinates(1, 2);
 
-            Assert.That(axial.q, Is.EqualTo(1));
-            Assert.That(axial.r, Is.EqualTo(2));
+            Assert.AreEqual(1, axial.q);
+            Assert.AreEqual(2, axial.r);
         }
 
-        [Test]
+        [TestMethod]
         public void ConstructorParameterless()
         {
             AxialCoordinates axial = new AxialCoordinates();
 
-            Assert.That(axial.q, Is.EqualTo(0));
-            Assert.That(axial.r, Is.EqualTo(0));
+            Assert.AreEqual(0, axial.q);
+            Assert.AreEqual(0, axial.r);
         }
 
-        [Test]
+        [TestMethod]
         public void ToCubic()
         {
             CubeCoordinates cubic = new AxialCoordinates(1, 2).ToCubic();
 
-            Assert.That(cubic.q, Is.EqualTo(1));
-            Assert.That(cubic.r, Is.EqualTo(-3));
-            Assert.That(cubic.s, Is.EqualTo(2));
+            Assert.AreEqual(1, cubic.q);
+            Assert.AreEqual(-3, cubic.r);
+            Assert.AreEqual(2, cubic.s);
         }
 
-        [Test]
+        [TestMethod]
         public void OperatorOverloadPlus()
         {
             AxialCoordinates axial = new AxialCoordinates(1, 2) + new AxialCoordinates(3, 4);
 
-            Assert.That(axial.q, Is.EqualTo(4));
-            Assert.That(axial.r, Is.EqualTo(6));
+            Assert.AreEqual(4, axial.q);
+            Assert.AreEqual(6, axial.r);
         }
 
-        [Test]
+        [TestMethod]
         public void OperatorOverloadMinus()
         {
             AxialCoordinates axial = new AxialCoordinates(4, 3) - new AxialCoordinates(1, 2);
 
-            Assert.That(axial.q, Is.EqualTo(3));
-            Assert.That(axial.r, Is.EqualTo(1));
+            Assert.AreEqual(3, axial.q);
+            Assert.AreEqual(1, axial.r);
         }
 
-        [Test]
+        [TestMethod]
         public void OperatorOverloadEquals()
         {
-            bool isTrue = new AxialCoordinates(1, 2) == new AxialCoordinates(1, 2);
-            bool isFalse = new AxialCoordinates(1, 2) == new AxialCoordinates(3, 4);
-
-            Assert.That(isTrue, Is.True);
-            Assert.That(isFalse, Is.False);
+            Assert.IsTrue(new AxialCoordinates(1, 2) == new AxialCoordinates(1, 2));
+            Assert.IsFalse(new AxialCoordinates(1, 2) == new AxialCoordinates(3, 4));
         }
 
-        [Test]
+        [TestMethod]
         public void OperatorOverloadNotEquals()
         {
-            bool isTrue = new AxialCoordinates(1, 2) != new AxialCoordinates(3, 4);
-            bool isFalse = new AxialCoordinates(1, 2) != new AxialCoordinates(1, 2);
-
-            Assert.That(isTrue, Is.True);
-            Assert.That(isFalse, Is.False);
+            Assert.IsTrue(new AxialCoordinates(1, 2) != new AxialCoordinates(3, 4));
+            Assert.IsFalse(new AxialCoordinates(1, 2) != new AxialCoordinates(1, 2));
         }
     }
 }

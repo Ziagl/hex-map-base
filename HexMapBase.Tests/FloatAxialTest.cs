@@ -1,49 +1,49 @@
-﻿using com.hexagonsimulations.Geometry.Hex;
+﻿using com.hexagonsimulations.HexMapBase.Geometry.Hex;
 
-namespace com.hexagonsimulations.Geometry.Test
+namespace com.hexagonsimulations.HexMapBase.Tests
 {
-    [TestFixture]
-    public class FloatAxialTest
+    [TestClass]
+    public sealed class FloatAxialTest
     {
         // The range in which floating-point numbers are consider equal.
         public const float EPSILON = 0.000001f;
 
-        [Test]
+        [TestMethod]
         public void ConstructorAxial()
         {
             AxialCoordinates axial = new AxialCoordinates(1, 2);
             FloatAxial floatAxial = new FloatAxial(axial);
 
-            Assert.That(floatAxial.q, Is.InRange(1f - EPSILON, 1f + EPSILON));
-            Assert.That(floatAxial.r, Is.InRange(2f - EPSILON, 2f + EPSILON));
+            Assert.IsTrue(floatAxial.q >= 1f - EPSILON && floatAxial.q <= 1f + EPSILON);
+            Assert.IsTrue(floatAxial.r >= 2f - EPSILON && floatAxial.r <= 2f + EPSILON);
         }
 
-        [Test]
+        [TestMethod]
         public void ConstructorQR()
         {
             FloatAxial floatAxial = new FloatAxial(1f, 2f);
 
-            Assert.That(floatAxial.q, Is.EqualTo(1f));
-            Assert.That(floatAxial.r, Is.EqualTo(2f));
+            Assert.AreEqual(1f, floatAxial.q);
+            Assert.AreEqual(2f, floatAxial.r);
         }
 
-        [Test]
+        [TestMethod]
         public void ConstructorParameterless()
         {
             FloatAxial floatAxial = new FloatAxial();
 
-            Assert.That(floatAxial.q, Is.EqualTo(0f));
-            Assert.That(floatAxial.r, Is.EqualTo(0f));
+            Assert.AreEqual(0f, floatAxial.q);
+            Assert.AreEqual(0f, floatAxial.r);
         }
 
-        [Test]
+        [TestMethod]
         public void ToFloatCubic()
         {
             FloatCubic floatCubic = new FloatAxial(1f, 2f).ToFloatCubic();
 
-            Assert.That(floatCubic.q, Is.InRange(1f - EPSILON, 1f + EPSILON));
-            Assert.That(floatCubic.r, Is.InRange(-3f - EPSILON, -3f + EPSILON));
-            Assert.That(floatCubic.s, Is.InRange(2f - EPSILON, 2f + EPSILON));
+            Assert.IsTrue(floatCubic.q >= 1f - EPSILON && floatCubic.q <= 1f + EPSILON);
+            Assert.IsTrue(floatCubic.r >= -3f - EPSILON && floatCubic.r <= -3f + EPSILON);
+            Assert.IsTrue(floatCubic.s >= 2f - EPSILON && floatCubic.s <= 2f + EPSILON);
         }
     }
 }

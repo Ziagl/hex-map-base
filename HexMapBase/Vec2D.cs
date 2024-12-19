@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace com.hexagonsimulations.Geometry.Hex
+namespace com.hexagonsimulations.HexMapBase.Geometry.Hex
 {
     /// <summary>
     /// A simple 2D vector implementation to store coordinates on the x-y cartesian plane.

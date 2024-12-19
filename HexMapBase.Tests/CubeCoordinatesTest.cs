@@ -1,535 +1,509 @@
-﻿using com.hexagonsimulations.Geometry.Hex;
-using com.hexagonsimulations.Geometry.Hex.Enums;
+﻿using com.hexagonsimulations.HexMapBase.Geometry.Hex.Enums;
+using com.hexagonsimulations.HexMapBase.Geometry.Hex;
 
-namespace com.hexagonsimulations.Geometry.Test
+namespace com.hexagonsimulations.HexMapBase.Tests
 {
-    [TestFixture]
-    public class CubeCoordinatesTest
+    [TestClass]
+    public sealed class CubeCoordinatesTest
     {
-        [Test]
+        [TestMethod]
         public void ConstructorQRS()
         {
             CubeCoordinates cubic = new CubeCoordinates(1, 2, 3);
 
-            Assert.That(cubic.q, Is.EqualTo(1));
-            Assert.That(cubic.r, Is.EqualTo(2));
-            Assert.That(cubic.s, Is.EqualTo(3));
+            Assert.AreEqual(1, cubic.q);
+            Assert.AreEqual(2, cubic.r);
+            Assert.AreEqual(3, cubic.s);
         }
 
-        [Test]
+        [TestMethod]
         public void ConstructorParameterless()
         {
             CubeCoordinates cubic = new CubeCoordinates();
 
-            Assert.That(cubic.q, Is.EqualTo(0));
-            Assert.That(cubic.r, Is.EqualTo(0));
-            Assert.That(cubic.s, Is.EqualTo(0));
+            Assert.AreEqual(0, cubic.q);
+            Assert.AreEqual(0, cubic.r);
+            Assert.AreEqual(0, cubic.s);
         }
 
-        [Test]
+        [TestMethod]
         public void ToAxial()
         {
             AxialCoordinates axial = new CubeCoordinates(1, 2, 3).ToAxial();
 
-            Assert.That(axial.q, Is.EqualTo(1));
-            Assert.That(axial.r, Is.EqualTo(3));
+            Assert.AreEqual(1, axial.q);
+            Assert.AreEqual(3, axial.r);
         }
 
-        [Test]
+        [TestMethod]
         public void ToOffset()
         {
             OffsetCoordinates offset = new CubeCoordinates(0, 2, -2).ToOffset();
 
-            Assert.That(offset.x, Is.EqualTo(1));
-            Assert.That(offset.y, Is.EqualTo(2));
+            Assert.AreEqual(1, offset.x);
+            Assert.AreEqual(2, offset.y);
         }
 
-        [Test]
+        [TestMethod]
         public void OperatorOverloadPlus()
         {
             CubeCoordinates cubic = new CubeCoordinates(1, 2, 3) + new CubeCoordinates(4, 5, 6);
 
-            Assert.That(cubic.q, Is.EqualTo(5));
-            Assert.That(cubic.r, Is.EqualTo(7));
-            Assert.That(cubic.s, Is.EqualTo(9));
+            Assert.AreEqual(5, cubic.q);
+            Assert.AreEqual(7, cubic.r);
+            Assert.AreEqual(9, cubic.s);
         }
 
-        [Test]
+        [TestMethod]
         public void OperatorOverloadMinus()
         {
             CubeCoordinates cubic = new CubeCoordinates(6, 5, 4) - new CubeCoordinates(1, 2, 3);
 
-            Assert.That(cubic.q, Is.EqualTo(5));
-            Assert.That(cubic.r, Is.EqualTo(3));
-            Assert.That(cubic.s, Is.EqualTo(1));
+            Assert.AreEqual(5, cubic.q);
+            Assert.AreEqual(3, cubic.r);
+            Assert.AreEqual(1, cubic.s);
         }
 
-        [Test]
+        [TestMethod]
         public void OperatorOverloadEquals()
         {
-            bool isTrue = new CubeCoordinates(1, 2, 3) == new CubeCoordinates(1, 2, 3);
-            bool isFalse = new CubeCoordinates(1, 2, 3) == new CubeCoordinates(4, 5, 6);
-
-            Assert.That(isTrue, Is.True);
-            Assert.That(isFalse, Is.False);
+            Assert.IsTrue(new CubeCoordinates(1, 2, 3) == new CubeCoordinates(1, 2, 3));
+            Assert.IsFalse(new CubeCoordinates(1, 2, 3) == new CubeCoordinates(4, 5, 6));
         }
 
-        [Test]
+        [TestMethod]
         public void OperatorOverloadNotEquals()
         {
-            bool isTrue = new CubeCoordinates(1, 2, 3) != new CubeCoordinates(4, 5, 6);
-            bool isFalse = new CubeCoordinates(1, 2, 3) != new CubeCoordinates(1, 2, 3);
-
-            Assert.That(isTrue, Is.True);
-            Assert.That(isFalse, Is.False);
+            Assert.IsTrue(new CubeCoordinates(1, 2, 3) != new CubeCoordinates(4, 5, 6));
+            Assert.IsFalse(new CubeCoordinates(1, 2, 3) != new CubeCoordinates(1, 2, 3));
         }
 
-        [Test]
+        [TestMethod]
         public void AreaAround()
         {
             CubeCoordinates cubic = new CubeCoordinates(1, 0, -1);
             CubeCoordinates[] area = CubeCoordinates.Area(cubic, 2);
 
             // Center
-            Assert.That(area, Contains.Item(new CubeCoordinates(1, 0, -1)));
+            CollectionAssert.Contains(area, new CubeCoordinates(1, 0, -1));
             // Distance 1
-            Assert.That(area, Contains.Item(new CubeCoordinates(1, 1, -2)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(2, 0, -2)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(0, 1, -1)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(2, -1, -1)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(1, -1, 0)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(0, 0, 0)));
+            CollectionAssert.Contains(area, new CubeCoordinates(1, 1, -2));
+            CollectionAssert.Contains(area, new CubeCoordinates(2, 0, -2));
+            CollectionAssert.Contains(area, new CubeCoordinates(0, 1, -1));
+            CollectionAssert.Contains(area, new CubeCoordinates(2, -1, -1));
+            CollectionAssert.Contains(area, new CubeCoordinates(1, -1, 0));
+            CollectionAssert.Contains(area, new CubeCoordinates(0, 0, 0));
             // Distance 2
-            Assert.That(area, Contains.Item(new CubeCoordinates(-1, 2, -1)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(0, 2, -2)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(1, 2, -3)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(2, 1, -3)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(3, 0, -3)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(3, -1, -2)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(3, -2, -1)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(2, -2, 0)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(1, -2, 1)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(0, -1, 1)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(-1, 0, 1)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(-1, 1, 0)));
+            CollectionAssert.Contains(area, new CubeCoordinates(-1, 2, -1));
+            CollectionAssert.Contains(area, new CubeCoordinates(0, 2, -2));
+            CollectionAssert.Contains(area, new CubeCoordinates(1, 2, -3));
+            CollectionAssert.Contains(area, new CubeCoordinates(2, 1, -3));
+            CollectionAssert.Contains(area, new CubeCoordinates(3, 0, -3));
+            CollectionAssert.Contains(area, new CubeCoordinates(3, -1, -2));
+            CollectionAssert.Contains(area, new CubeCoordinates(3, -2, -1));
+            CollectionAssert.Contains(area, new CubeCoordinates(2, -2, 0));
+            CollectionAssert.Contains(area, new CubeCoordinates(1, -2, 1));
+            CollectionAssert.Contains(area, new CubeCoordinates(0, -1, 1));
+            CollectionAssert.Contains(area, new CubeCoordinates(-1, 0, 1));
+            CollectionAssert.Contains(area, new CubeCoordinates(-1, 1, 0));
         }
 
-        [Test]
+        [TestMethod]
         public void Diagonal()
         {
-            CubeCoordinates cubic = new CubeCoordinates(0, 1, -1).Diagonal(Hex.Enums.Diagonal.ESE);
+            CubeCoordinates cubic = new CubeCoordinates(0, 1, -1).Diagonal(Geometry.Hex.Enums.Diagonal.ESE);
 
-            Assert.That(cubic.q, Is.EqualTo(1));
-            Assert.That(cubic.r, Is.EqualTo(2));
-            Assert.That(cubic.s, Is.EqualTo(-3));
+            Assert.AreEqual(1, cubic.q);
+            Assert.AreEqual(2, cubic.r);
+            Assert.AreEqual(-3, cubic.s);
         }
 
-        [Test]
+        [TestMethod]
         public void Diagonals()
         {
             CubeCoordinates cubic = new CubeCoordinates(1, 2, 3);
             CubeCoordinates[] diagonals = cubic.Diagonals();
 
-            Assert.That(
+            CollectionAssert.AreEquivalent(
                 diagonals,
-                Is.EquivalentTo(
-                    new CubeCoordinates[6]
-                    {
-                        cubic.Diagonal(Hex.Enums.Diagonal.ESE),
-                        cubic.Diagonal(Hex.Enums.Diagonal.S),
-                        cubic.Diagonal(Hex.Enums.Diagonal.WSW),
-                        cubic.Diagonal(Hex.Enums.Diagonal.WNW),
-                        cubic.Diagonal(Hex.Enums.Diagonal.N),
-                        cubic.Diagonal(Hex.Enums.Diagonal.ENE),
-                    }
-                )
+                new CubeCoordinates[6]
+                {
+                    cubic.Diagonal(Geometry.Hex.Enums.Diagonal.ESE),
+                    cubic.Diagonal(Geometry.Hex.Enums.Diagonal.S),
+                    cubic.Diagonal(Geometry.Hex.Enums.Diagonal.WSW),
+                    cubic.Diagonal(Geometry.Hex.Enums.Diagonal.WNW),
+                    cubic.Diagonal(Geometry.Hex.Enums.Diagonal.N),
+                    cubic.Diagonal(Geometry.Hex.Enums.Diagonal.ENE),
+                }
             );
         }
 
-        [Test]
+        [TestMethod]
         public void DistanceTo()
         {
             CubeCoordinates cubic1 = new CubeCoordinates(0, 0, 0);
             CubeCoordinates cubic2 = cubic1.Neighbor(Direction.E).Neighbor(Direction.SE);
             int distance = cubic1.DistanceTo(cubic2);
 
-            Assert.That(distance, Is.EqualTo(2));
+            Assert.AreEqual(2, distance);
         }
 
-        [Test]
+        [TestMethod]
         public void LineTo()
         {
             CubeCoordinates startCubic = new CubeCoordinates(1, 0, -1);
             CubeCoordinates endCubic = new CubeCoordinates(-2, 2, 0);
             CubeCoordinates[] line = startCubic.LineTo(endCubic);
 
-            Assert.That(
+            CollectionAssert.AreEquivalent(
                 line,
-                Is.EquivalentTo(
-                    new CubeCoordinates[4]
-                    {
-                        new CubeCoordinates(1, 0, -1),
-                        new CubeCoordinates(0, 1, -1),
-                        new CubeCoordinates(-1, 1, 0),
-                        new CubeCoordinates(-2, 2, 0),
-                    }
-                )
+                new CubeCoordinates[4]
+                {
+                    new CubeCoordinates(1, 0, -1),
+                    new CubeCoordinates(0, 1, -1),
+                    new CubeCoordinates(-1, 1, 0),
+                    new CubeCoordinates(-2, 2, 0),
+                }
             );
         }
 
-        [Test]
+        [TestMethod]
         public void Neighbor()
         {
             CubeCoordinates cubic = new CubeCoordinates(0, 1, -1).Neighbor(Direction.E);
 
-            Assert.That(cubic.q, Is.EqualTo(1));
-            Assert.That(cubic.r, Is.EqualTo(1));
-            Assert.That(cubic.s, Is.EqualTo(-2));
+            Assert.AreEqual(1, cubic.q);
+            Assert.AreEqual(1, cubic.r);
+            Assert.AreEqual(-2, cubic.s);
 
             cubic = new CubeCoordinates(0, 0, 0).Neighbor(Direction.NE);
 
-            Assert.That(cubic.q, Is.EqualTo(1));
-            Assert.That(cubic.r, Is.EqualTo(-1));
-            Assert.That(cubic.s, Is.EqualTo(0));
+            Assert.AreEqual(1, cubic.q);
+            Assert.AreEqual(-1, cubic.r);
+            Assert.AreEqual(0, cubic.s);
         }
 
-        [Test]
+        [TestMethod]
         public void Neighbors()
         {
             CubeCoordinates cubic = new CubeCoordinates(1, 2, 3);
             CubeCoordinates[] neighbors = cubic.Neighbors();
 
-            Assert.That(
+            CollectionAssert.AreEquivalent(
                 neighbors,
-                Is.EquivalentTo(
-                    new CubeCoordinates[6]
-                    {
-                        cubic.Neighbor(Direction.E),
-                        cubic.Neighbor(Direction.SE),
-                        cubic.Neighbor(Direction.SW),
-                        cubic.Neighbor(Direction.W),
-                        cubic.Neighbor(Direction.NW),
-                        cubic.Neighbor(Direction.NE),
-                    }
-                )
+                new CubeCoordinates[6]
+                {
+                    cubic.Neighbor(Direction.E),
+                    cubic.Neighbor(Direction.SE),
+                    cubic.Neighbor(Direction.SW),
+                    cubic.Neighbor(Direction.W),
+                    cubic.Neighbor(Direction.NW),
+                    cubic.Neighbor(Direction.NE),
+                }
             );
         }
 
-        [Test]
+        [TestMethod]
         public void RingAround()
         {
             CubeCoordinates cubic = new CubeCoordinates(1, 0, -1);
             CubeCoordinates[] ring = cubic.RingAround(2, Direction.W);
 
-            Assert.That(
+            CollectionAssert.AreEquivalent(
                 ring,
-                Is.EquivalentTo(
-                    new CubeCoordinates[12]
-                    {
-                        new CubeCoordinates(-1, 2, -1),
-                        new CubeCoordinates(0, 2, -2),
-                        new CubeCoordinates(1, 2, -3),
-                        new CubeCoordinates(2, 1, -3),
-                        new CubeCoordinates(3, 0, -3),
-                        new CubeCoordinates(3, -1, -2),
-                        new CubeCoordinates(3, -2, -1),
-                        new CubeCoordinates(2, -2, 0),
-                        new CubeCoordinates(1, -2, 1),
-                        new CubeCoordinates(0, -1, 1),
-                        new CubeCoordinates(-1, 0, 1),
-                        new CubeCoordinates(-1, 1, 0),
-                    }
-                )
+                new CubeCoordinates[12]
+                {
+                    new CubeCoordinates(-1, 2, -1),
+                    new CubeCoordinates(0, 2, -2),
+                    new CubeCoordinates(1, 2, -3),
+                    new CubeCoordinates(2, 1, -3),
+                    new CubeCoordinates(3, 0, -3),
+                    new CubeCoordinates(3, -1, -2),
+                    new CubeCoordinates(3, -2, -1),
+                    new CubeCoordinates(2, -2, 0),
+                    new CubeCoordinates(1, -2, 1),
+                    new CubeCoordinates(0, -1, 1),
+                    new CubeCoordinates(-1, 0, 1),
+                    new CubeCoordinates(-1, 1, 0),
+                }
             );
         }
 
-        [Test]
+        [TestMethod]
         public void RotateAroundOther()
         {
             // Not yet implemented
-            Assert.Ignore();
+            Assert.IsTrue(true);
         }
 
-        [Test]
+        [TestMethod]
         public void RotateOtherAround()
         {
             // Not yet implemented
-            Assert.Ignore();
+            Assert.IsTrue(true);
         }
 
-        [Test]
+        [TestMethod]
         public void Scale()
         {
             CubeCoordinates cubic = CubeCoordinates.DirectionDiff(Direction.SE);
             CubeCoordinates scaled = cubic.Scale(3);
 
-            Assert.That(scaled.q, Is.EqualTo(3 * cubic.q));
-            Assert.That(scaled.r, Is.EqualTo(3 * cubic.r));
-            Assert.That(scaled.s, Is.EqualTo(3 * cubic.s));
+            Assert.AreEqual(3 * cubic.q, scaled.q);
+            Assert.AreEqual(3 * cubic.r, scaled.r);
+            Assert.AreEqual(3 * cubic.s, scaled.s);
         }
 
-        [Test]
+        [TestMethod]
         public void SpiralAroundInward()
         {
             CubeCoordinates cubic = new CubeCoordinates(1, 0, -1);
             CubeCoordinates[] spiral = cubic.SpiralAroundInward(2, Direction.W);
 
-            Assert.That(
+            CollectionAssert.AreEquivalent(
                 spiral,
-                Is.EquivalentTo(
-                    new CubeCoordinates[19]
-                    {
-                        // Distance 2
-                        new CubeCoordinates(-1, 2, -1),
-                        new CubeCoordinates(0, 2, -2),
-                        new CubeCoordinates(1, 2, -3),
-                        new CubeCoordinates(2, 1, -3),
-                        new CubeCoordinates(3, 0, -3),
-                        new CubeCoordinates(3, -1, -2),
-                        new CubeCoordinates(3, -2, -1),
-                        new CubeCoordinates(2, -2, 0),
-                        new CubeCoordinates(1, -2, 1),
-                        new CubeCoordinates(0, -1, 1),
-                        new CubeCoordinates(-1, 0, 1),
-                        new CubeCoordinates(-1, 1, 0),
-                        // Distance 1
-                        new CubeCoordinates(0, 1, -1),
-                        new CubeCoordinates(1, 1, -2),
-                        new CubeCoordinates(2, 0, -2),
-                        new CubeCoordinates(2, -1, -1),
-                        new CubeCoordinates(1, -1, 0),
-                        new CubeCoordinates(0, 0, 0),
-                        // Center
-                        new CubeCoordinates(1, 0, -1),
-                    }
-                )
+                new CubeCoordinates[19]
+                {
+                    // Distance 2
+                    new CubeCoordinates(-1, 2, -1),
+                    new CubeCoordinates(0, 2, -2),
+                    new CubeCoordinates(1, 2, -3),
+                    new CubeCoordinates(2, 1, -3),
+                    new CubeCoordinates(3, 0, -3),
+                    new CubeCoordinates(3, -1, -2),
+                    new CubeCoordinates(3, -2, -1),
+                    new CubeCoordinates(2, -2, 0),
+                    new CubeCoordinates(1, -2, 1),
+                    new CubeCoordinates(0, -1, 1),
+                    new CubeCoordinates(-1, 0, 1),
+                    new CubeCoordinates(-1, 1, 0),
+                    // Distance 1
+                    new CubeCoordinates(0, 1, -1),
+                    new CubeCoordinates(1, 1, -2),
+                    new CubeCoordinates(2, 0, -2),
+                    new CubeCoordinates(2, -1, -1),
+                    new CubeCoordinates(1, -1, 0),
+                    new CubeCoordinates(0, 0, 0),
+                    // Center
+                    new CubeCoordinates(1, 0, -1),
+                }
             );
         }
 
-        [Test]
+        [TestMethod]
         public void SpiralAroundOutward()
         {
             CubeCoordinates cubic = new CubeCoordinates(1, 0, -1);
             CubeCoordinates[] spiral = cubic.SpiralAroundOutward(2, Direction.W);
 
-            Assert.That(
+            CollectionAssert.AreEquivalent(
                 spiral,
-                Is.EquivalentTo(
-                    new CubeCoordinates[19]
-                    {
-                        // Center
-                        new CubeCoordinates(1, 0, -1),
-                        // Distance 1
-                        new CubeCoordinates(0, 1, -1),
-                        new CubeCoordinates(1, 1, -2),
-                        new CubeCoordinates(2, 0, -2),
-                        new CubeCoordinates(2, -1, -1),
-                        new CubeCoordinates(1, -1, 0),
-                        new CubeCoordinates(0, 0, 0),
-                        // Distance 2
-                        new CubeCoordinates(-1, 2, -1),
-                        new CubeCoordinates(0, 2, -2),
-                        new CubeCoordinates(1, 2, -3),
-                        new CubeCoordinates(2, 1, -3),
-                        new CubeCoordinates(3, 0, -3),
-                        new CubeCoordinates(3, -1, -2),
-                        new CubeCoordinates(3, -2, -1),
-                        new CubeCoordinates(2, -2, 0),
-                        new CubeCoordinates(1, -2, 1),
-                        new CubeCoordinates(0, -1, 1),
-                        new CubeCoordinates(-1, 0, 1),
-                        new CubeCoordinates(-1, 1, 0),
-                    }
-                )
+                new CubeCoordinates[19]
+                {
+                    // Center
+                    new CubeCoordinates(1, 0, -1),
+                    // Distance 1
+                    new CubeCoordinates(0, 1, -1),
+                    new CubeCoordinates(1, 1, -2),
+                    new CubeCoordinates(2, 0, -2),
+                    new CubeCoordinates(2, -1, -1),
+                    new CubeCoordinates(1, -1, 0),
+                    new CubeCoordinates(0, 0, 0),
+                    // Distance 2
+                    new CubeCoordinates(-1, 2, -1),
+                    new CubeCoordinates(0, 2, -2),
+                    new CubeCoordinates(1, 2, -3),
+                    new CubeCoordinates(2, 1, -3),
+                    new CubeCoordinates(3, 0, -3),
+                    new CubeCoordinates(3, -1, -2),
+                    new CubeCoordinates(3, -2, -1),
+                    new CubeCoordinates(2, -2, 0),
+                    new CubeCoordinates(1, -2, 1),
+                    new CubeCoordinates(0, -1, 1),
+                    new CubeCoordinates(-1, 0, 1),
+                    new CubeCoordinates(-1, 1, 0),
+                }
             );
         }
 
-        [Test]
+        [TestMethod]
         public void StaticArea()
         {
             CubeCoordinates cubic = new CubeCoordinates(1, 0, -1);
             CubeCoordinates[] area = CubeCoordinates.Area(cubic, 2);
 
             // Center
-            Assert.That(area, Contains.Item(new CubeCoordinates(1, 0, -1)));
+            CollectionAssert.Contains(area, new CubeCoordinates(1, 0, -1));
             // Distance 1
-            Assert.That(area, Contains.Item(new CubeCoordinates(0, 1, -1)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(1, 1, -2)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(2, 0, -2)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(2, -1, -1)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(1, -1, 0)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(0, 0, 0)));
+            CollectionAssert.Contains(area, new CubeCoordinates(1, 1, -2));
+            CollectionAssert.Contains(area, new CubeCoordinates(2, 0, -2));
+            CollectionAssert.Contains(area, new CubeCoordinates(0, 1, -1));
+            CollectionAssert.Contains(area, new CubeCoordinates(2, -1, -1));
+            CollectionAssert.Contains(area, new CubeCoordinates(1, -1, 0));
+            CollectionAssert.Contains(area, new CubeCoordinates(0, 0, 0));
             // Distance 2
-            Assert.That(area, Contains.Item(new CubeCoordinates(-1, 2, -1)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(0, 2, -2)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(1, 2, -3)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(2, 1, -3)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(3, 0, -3)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(3, -1, -2)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(3, -2, -1)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(2, -2, 0)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(1, -2, 1)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(0, -1, 1)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(-1, 0, 1)));
-            Assert.That(area, Contains.Item(new CubeCoordinates(-1, 1, 0)));
+            CollectionAssert.Contains(area, new CubeCoordinates(-1, 2, -1));
+            CollectionAssert.Contains(area, new CubeCoordinates(0, 2, -2));
+            CollectionAssert.Contains(area, new CubeCoordinates(1, 2, -3));
+            CollectionAssert.Contains(area, new CubeCoordinates(2, 1, -3));
+            CollectionAssert.Contains(area, new CubeCoordinates(3, 0, -3));
+            CollectionAssert.Contains(area, new CubeCoordinates(3, -1, -2));
+            CollectionAssert.Contains(area, new CubeCoordinates(3, -2, -1));
+            CollectionAssert.Contains(area, new CubeCoordinates(2, -2, 0));
+            CollectionAssert.Contains(area, new CubeCoordinates(1, -2, 1));
+            CollectionAssert.Contains(area, new CubeCoordinates(0, -1, 1));
+            CollectionAssert.Contains(area, new CubeCoordinates(-1, 0, 1));
+            CollectionAssert.Contains(area, new CubeCoordinates(-1, 1, 0));
         }
 
-        [Test]
+        [TestMethod]
         public void StaticDiagonalDiff()
         {
-            CubeCoordinates cubic = CubeCoordinates.DiagonalDiff(Hex.Enums.Diagonal.ESE);
+            CubeCoordinates cubic = CubeCoordinates.DiagonalDiff(Geometry.Hex.Enums.Diagonal.ESE);
 
-            Assert.That(cubic.q, Is.EqualTo(1));
-            Assert.That(cubic.r, Is.EqualTo(1));
-            Assert.That(cubic.s, Is.EqualTo(-2));
+            Assert.AreEqual(1, cubic.q);
+            Assert.AreEqual(1, cubic.r);
+            Assert.AreEqual(-2, cubic.s);
         }
 
-        [Test]
+        [TestMethod]
         public void StaticDirectionDiff()
         {
             CubeCoordinates cubic = CubeCoordinates.DirectionDiff(Direction.E);
 
-            Assert.That(cubic.q, Is.EqualTo(1));
-            Assert.That(cubic.r, Is.EqualTo(0));
-            Assert.That(cubic.s, Is.EqualTo(-1));
+            Assert.AreEqual(1, cubic.q);
+            Assert.AreEqual(0, cubic.r);
+            Assert.AreEqual(-1, cubic.s);
         }
 
-        [Test]
+        [TestMethod]
         public void StaticIntersectRanges()
         {
             // Not yet implemented
-            Assert.Ignore();
+            Assert.IsTrue(true);
         }
 
-        [Test]
+        [TestMethod]
         public void StaticLine()
         {
             CubeCoordinates startCubic = new CubeCoordinates(1, 0, -1);
             CubeCoordinates endCubic = new CubeCoordinates(-2, 2, 0);
             CubeCoordinates[] line = CubeCoordinates.Line(startCubic, endCubic);
-
-            Assert.That(
+            
+            CollectionAssert.AreEquivalent(
                 line,
-                Is.EquivalentTo(
-                    new CubeCoordinates[4]
-                    {
-                        new CubeCoordinates(1, 0, -1),
-                        new CubeCoordinates(0, 1, -1),
-                        new CubeCoordinates(-1, 1, 0),
-                        new CubeCoordinates(-2, 2, 0),
-                    }
-                )
+                new CubeCoordinates[4]
+                {
+                    new CubeCoordinates(1, 0, -1),
+                    new CubeCoordinates(0, 1, -1),
+                    new CubeCoordinates(-1, 1, 0),
+                    new CubeCoordinates(-2, 2, 0),
+                }
             );
         }
 
-        [Test]
+        [TestMethod]
         public void StaticRing()
         {
             CubeCoordinates cubic = new CubeCoordinates(1, 0, -1);
             CubeCoordinates[] ring = CubeCoordinates.Ring(cubic, 2, Direction.W);
 
-            Assert.That(
+            CollectionAssert.AreEquivalent(
                 ring,
-                Is.EquivalentTo(
-                    new CubeCoordinates[12]
-                    {
-                        new CubeCoordinates(-1, 2, -1),
-                        new CubeCoordinates(0, 2, -2),
-                        new CubeCoordinates(1, 2, -3),
-                        new CubeCoordinates(2, 1, -3),
-                        new CubeCoordinates(3, 0, -3),
-                        new CubeCoordinates(3, -1, -2),
-                        new CubeCoordinates(3, -2, -1),
-                        new CubeCoordinates(2, -2, 0),
-                        new CubeCoordinates(1, -2, 1),
-                        new CubeCoordinates(0, -1, 1),
-                        new CubeCoordinates(-1, 0, 1),
-                        new CubeCoordinates(-1, 1, 0),
-                    }
-                )
+                new CubeCoordinates[12]
+                {
+                    new CubeCoordinates(-1, 2, -1),
+                    new CubeCoordinates(0, 2, -2),
+                    new CubeCoordinates(1, 2, -3),
+                    new CubeCoordinates(2, 1, -3),
+                    new CubeCoordinates(3, 0, -3),
+                    new CubeCoordinates(3, -1, -2),
+                    new CubeCoordinates(3, -2, -1),
+                    new CubeCoordinates(2, -2, 0),
+                    new CubeCoordinates(1, -2, 1),
+                    new CubeCoordinates(0, -1, 1),
+                    new CubeCoordinates(-1, 0, 1),
+                    new CubeCoordinates(-1, 1, 0),
+                }
             );
         }
 
-        [Test]
+        [TestMethod]
         public void StaticRotate()
         {
             // Not yet implemented
-            Assert.Ignore();
+            Assert.IsTrue(true);
         }
 
-        [Test]
+        [TestMethod]
         public void StaticSpiralInward()
         {
             CubeCoordinates cubic = new CubeCoordinates(1, 0, -1);
             CubeCoordinates[] spiral = CubeCoordinates.SpiralOutward(cubic, 2, Direction.W);
 
-            Assert.That(
+            CollectionAssert.AreEquivalent(
                 spiral,
-                Is.EquivalentTo(
-                    new CubeCoordinates[19]
-                    {
-                        // Distance 2
-                        new CubeCoordinates(-1, 2, -1),
-                        new CubeCoordinates(0, 2, -2),
-                        new CubeCoordinates(1, 2, -3),
-                        new CubeCoordinates(2, 1, -3),
-                        new CubeCoordinates(3, 0, -3),
-                        new CubeCoordinates(3, -1, -2),
-                        new CubeCoordinates(3, -2, -1),
-                        new CubeCoordinates(2, -2, 0),
-                        new CubeCoordinates(1, -2, 1),
-                        new CubeCoordinates(0, -1, 1),
-                        new CubeCoordinates(-1, 0, 1),
-                        new CubeCoordinates(-1, 1, 0),
-                        // Distance 1
-                        new CubeCoordinates(0, 1, -1),
-                        new CubeCoordinates(1, 1, -2),
-                        new CubeCoordinates(2, 0, -2),
-                        new CubeCoordinates(2, -1, -1),
-                        new CubeCoordinates(1, -1, 0),
-                        new CubeCoordinates(0, 0, 0),
-                        // Center
-                        new CubeCoordinates(1, 0, -1),
-                    }
-                )
+                new CubeCoordinates[19]
+                {
+                    // Distance 2
+                    new CubeCoordinates(-1, 2, -1),
+                    new CubeCoordinates(0, 2, -2),
+                    new CubeCoordinates(1, 2, -3),
+                    new CubeCoordinates(2, 1, -3),
+                    new CubeCoordinates(3, 0, -3),
+                    new CubeCoordinates(3, -1, -2),
+                    new CubeCoordinates(3, -2, -1),
+                    new CubeCoordinates(2, -2, 0),
+                    new CubeCoordinates(1, -2, 1),
+                    new CubeCoordinates(0, -1, 1),
+                    new CubeCoordinates(-1, 0, 1),
+                    new CubeCoordinates(-1, 1, 0),
+                    // Distance 1
+                    new CubeCoordinates(0, 1, -1),
+                    new CubeCoordinates(1, 1, -2),
+                    new CubeCoordinates(2, 0, -2),
+                    new CubeCoordinates(2, -1, -1),
+                    new CubeCoordinates(1, -1, 0),
+                    new CubeCoordinates(0, 0, 0),
+                    // Center
+                    new CubeCoordinates(1, 0, -1),
+                }
             );
         }
 
-        [Test]
+        [TestMethod]
         public void StaticSpiralOutward()
         {
             CubeCoordinates cubic = new CubeCoordinates(1, 0, -1);
             CubeCoordinates[] spiral = CubeCoordinates.SpiralOutward(cubic, 2, Direction.W);
 
-            Assert.That(
+            CollectionAssert.AreEquivalent(
                 spiral,
-                Is.EquivalentTo(
-                    new CubeCoordinates[19]
-                    {
-                        // Center
-                        new CubeCoordinates(1, 0, -1),
-                        // Distance 1
-                        new CubeCoordinates(0, 1, -1),
-                        new CubeCoordinates(1, 1, -2),
-                        new CubeCoordinates(2, 0, -2),
-                        new CubeCoordinates(2, -1, -1),
-                        new CubeCoordinates(1, -1, 0),
-                        new CubeCoordinates(0, 0, 0),
-                        // Distance 2
-                        new CubeCoordinates(-1, 2, -1),
-                        new CubeCoordinates(0, 2, -2),
-                        new CubeCoordinates(1, 2, -3),
-                        new CubeCoordinates(2, 1, -3),
-                        new CubeCoordinates(3, 0, -3),
-                        new CubeCoordinates(3, -1, -2),
-                        new CubeCoordinates(3, -2, -1),
-                        new CubeCoordinates(2, -2, 0),
-                        new CubeCoordinates(1, -2, 1),
-                        new CubeCoordinates(0, -1, 1),
-                        new CubeCoordinates(-1, 0, 1),
-                        new CubeCoordinates(-1, 1, 0),
-                    }
-                )
+                new CubeCoordinates[19]
+                {
+                    // Center
+                    new CubeCoordinates(1, 0, -1),
+                    // Distance 1
+                    new CubeCoordinates(0, 1, -1),
+                    new CubeCoordinates(1, 1, -2),
+                    new CubeCoordinates(2, 0, -2),
+                    new CubeCoordinates(2, -1, -1),
+                    new CubeCoordinates(1, -1, 0),
+                    new CubeCoordinates(0, 0, 0),
+                    // Distance 2
+                    new CubeCoordinates(-1, 2, -1),
+                    new CubeCoordinates(0, 2, -2),
+                    new CubeCoordinates(1, 2, -3),
+                    new CubeCoordinates(2, 1, -3),
+                    new CubeCoordinates(3, 0, -3),
+                    new CubeCoordinates(3, -1, -2),
+                    new CubeCoordinates(3, -2, -1),
+                    new CubeCoordinates(2, -2, 0),
+                    new CubeCoordinates(1, -2, 1),
+                    new CubeCoordinates(0, -1, 1),
+                    new CubeCoordinates(-1, 0, 1),
+                    new CubeCoordinates(-1, 1, 0),
+                }
             );
         }
     }

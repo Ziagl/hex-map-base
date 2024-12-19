@@ -1,10 +1,10 @@
-﻿using com.hexagonsimulations.Geometry.Hex;
-using com.hexagonsimulations.Geometry.Hex.Enums;
+﻿using com.hexagonsimulations.HexMapBase.Geometry.Hex.Enums;
+using com.hexagonsimulations.HexMapBase.Geometry.Hex;
 
-namespace com.hexagonsimulations.Geometry.Test
+namespace com.hexagonsimulations.HexMapBase.Tests
 {
-    [TestFixture]
-    public class HexGridTest
+    [TestClass]
+    public sealed class HexGridTest
     {
         // The range in which floating-point numbers are consider equal.
         public const float EPSILON = 0.000001f;
@@ -12,15 +12,15 @@ namespace com.hexagonsimulations.Geometry.Test
         // The result of (float)Math.Sqrt( 3f ) just for convenience.
         public const float SQRT_3 = 1.7320508075688772935274463415059f;
 
-        [Test]
+        [TestMethod]
         public void PropertyHexRadius()
         {
             float hexRadius = new HexGrid(2f).HexRadius;
 
-            Assert.That(hexRadius, Is.EqualTo(2f));
+            Assert.AreEqual(2f, hexRadius);
         }
 
-        [Test]
+        [TestMethod]
         public void PropertySlice()
         {
             var grid = new HexGrid(2f);
@@ -30,19 +30,19 @@ namespace com.hexagonsimulations.Geometry.Test
             float xExpected = 0.5f * SQRT_3 * hexRadius;
             float yExpected = 0.5f * hexRadius;
 
-            Assert.That(slice.x, Is.InRange(xExpected - EPSILON, xExpected + EPSILON));
-            Assert.That(slice.y, Is.InRange(yExpected - EPSILON, yExpected + EPSILON));
+            Assert.IsTrue(slice.x >= xExpected - EPSILON && slice.x <= xExpected + EPSILON);
+            Assert.IsTrue(slice.y >= yExpected - EPSILON && slice.y <= yExpected + EPSILON);
         }
 
-        [Test]
+        [TestMethod]
         public void ConstructorHexRadius()
         {
             var grid = new HexGrid(2f);
 
-            Assert.That(grid.HexRadius, Is.EqualTo(2f));
+            Assert.AreEqual(2f, grid.HexRadius);
         }
 
-        [Test]
+        [TestMethod]
         public void AxialToPoint()
         {
             var grid = new HexGrid(2f);
@@ -52,11 +52,11 @@ namespace com.hexagonsimulations.Geometry.Test
             float xExpected = hexRadius * SQRT_3 * (10 + 10 / 2);
             float yExpected = hexRadius * (3f / 2f) * 10;
 
-            Assert.That(point.x, Is.InRange(xExpected - EPSILON, xExpected + EPSILON));
-            Assert.That(point.y, Is.InRange(yExpected - EPSILON, yExpected + EPSILON));
+            Assert.IsTrue(point.x >= xExpected - EPSILON && point.x <= xExpected + EPSILON);
+            Assert.IsTrue(point.y >= yExpected - EPSILON && point.y <= yExpected + EPSILON);
         }
 
-        [Test]
+        [TestMethod]
         public void OffsetToPoint()
         {
             var grid = new HexGrid(2f);
@@ -67,19 +67,19 @@ namespace com.hexagonsimulations.Geometry.Test
             float xExpected = hexRadius * SQRT_3 * 10;
             float yExpected = hexRadius * (3f / 2f) * 10;
 
-            Assert.That(point.x, Is.InRange(xExpected - EPSILON, xExpected + EPSILON));
-            Assert.That(point.y, Is.InRange(yExpected - EPSILON, yExpected + EPSILON));
+            Assert.IsTrue(point.x >= xExpected - EPSILON && point.x <= xExpected + EPSILON);
+            Assert.IsTrue(point.y >= yExpected - EPSILON && point.y <= yExpected + EPSILON);
 
             // Text an odd row hex
             point = grid.OffsetToPoint(new OffsetCoordinates(10, 11));
             xExpected = hexRadius * SQRT_3 * (10 + 0.5f);
             yExpected = hexRadius * (3f / 2f) * 11;
 
-            Assert.That(point.x, Is.InRange(xExpected - EPSILON, xExpected + EPSILON));
-            Assert.That(point.y, Is.InRange(yExpected - EPSILON, yExpected + EPSILON));
+            Assert.IsTrue(point.x >= xExpected - EPSILON && point.x <= xExpected + EPSILON);
+            Assert.IsTrue(point.y >= yExpected - EPSILON && point.y <= yExpected + EPSILON);
         }
 
-        [Test]
+        [TestMethod]
         public void PointToCubic()
         {
             var grid = new HexGrid(3f);
@@ -99,12 +99,12 @@ namespace com.hexagonsimulations.Geometry.Test
 
             // Now that I'm close enough to guess, I'll just do that rather than trying to emulate
             // the rounding all the way through. Not accurate, but good enough for government work.
-            Assert.That(cubic.q, Is.EqualTo(1));
-            Assert.That(cubic.r, Is.EqualTo(-3));
-            Assert.That(cubic.s, Is.EqualTo(2));
+            Assert.AreEqual(1, cubic.q);
+            Assert.AreEqual(-3, cubic.r);
+            Assert.AreEqual(2, cubic.s);
         }
 
-        [Test]
+        [TestMethod]
         public void PointToDirectionInHex()
         {
             var grid = new HexGrid(2f);
@@ -137,35 +137,32 @@ namespace com.hexagonsimulations.Geometry.Test
                 results[i] = grid.PointToDirectionInHex(points[i]);
             }
 
-            Assert.That(
+            CollectionAssert.AreEquivalent(
                 results,
-                Is.EquivalentTo(
-                    new Direction[12]
-                    {
-                        Direction.E, // 0a
-                        Direction.E, // 0b
-                        Direction.SE, // 1a
-                        Direction.SE, // 1b
-                        Direction.SW, // 2a
-                        Direction.SW, // 2b
-                        Direction.W, // 3a
-                        Direction.W, // 3b
-                        Direction.NW, // 4a
-                        Direction.NW, // 4b
-                        Direction.NE, // 5a
-                        Direction.NE // 5b
-                        ,
-                    }
-                )
+                new Direction[12]
+                {
+                    Direction.E, // 0a
+                    Direction.E, // 0b
+                    Direction.SE, // 1a
+                    Direction.SE, // 1b
+                    Direction.SW, // 2a
+                    Direction.SW, // 2b
+                    Direction.W, // 3a
+                    Direction.W, // 3b
+                    Direction.NW, // 4a
+                    Direction.NW, // 4b
+                    Direction.NE, // 5a
+                    Direction.NE, // 5b
+                }
             );
         }
 
-        [Test]
+        [TestMethod]
         public void InitializeGrid()
         {
             var grid = HexGrid.InitializeGrid<HexTile>(3, 3);
-            Assert.That(grid[1].Coordinates == new CubeCoordinates(1, 0,-1));
-            Assert.That(grid[^1].Coordinates == new CubeCoordinates(1, 2,-3));
+            Assert.IsTrue(grid[1].Coordinates == new CubeCoordinates(1, 0, -1));
+            Assert.IsTrue(grid[^1].Coordinates == new CubeCoordinates(1, 2, -3));
         }
     }
 }

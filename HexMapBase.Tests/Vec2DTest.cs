@@ -1,50 +1,50 @@
-﻿using com.hexagonsimulations.Geometry.Hex;
+﻿using com.hexagonsimulations.HexMapBase.Geometry.Hex;
 
-namespace com.hexagonsimulations.Geometry.Test
+namespace com.hexagonsimulations.HexMapBase.Tests
 {
-    [TestFixture]
-    public class Vec2DTest
+    [TestClass]
+    public sealed class Vec2DTest
     {
         // The range in which floating-point numbers are consider equal.
         public const float EPSILON = 0.000001f;
 
-        [Test]
+        [TestMethod]
         public void ConstructorXZ()
         {
             Vec2D point = new Vec2D(1f, 2f);
 
-            Assert.That(point.x, Is.EqualTo(1f));
-            Assert.That(point.y, Is.EqualTo(2f));
+            Assert.AreEqual(1f, point.x);
+            Assert.AreEqual(2, point.y);
         }
 
-        [Test]
+        [TestMethod]
         public void ConstructorParameterless()
         {
             Vec2D point = new Vec2D();
 
-            Assert.That(point.x, Is.EqualTo(0f));
-            Assert.That(point.y, Is.EqualTo(0f));
+            Assert.AreEqual(0f, point.x);
+            Assert.AreEqual(0f, point.y);
         }
 
-        [Test]
+        [TestMethod]
         public void OperatorOverloadPlus()
         {
             Vec2D point = new Vec2D(1f, 2f) + new Vec2D(3f, 4f);
 
-            Assert.That(point.x, Is.InRange(4f - EPSILON, 4f + EPSILON));
-            Assert.That(point.y, Is.InRange(6f - EPSILON, 6f + EPSILON));
+            Assert.IsTrue(point.x >= 4f - EPSILON && point.x <= 4f + EPSILON);
+            Assert.IsTrue(point.y >= 6f - EPSILON && point.y <= 6f + EPSILON);
         }
 
-        [Test]
+        [TestMethod]
         public void OperatorOverloadMinus()
         {
             Vec2D point = new Vec2D(4f, 3f) - new Vec2D(1f, 2f);
 
-            Assert.That(point.x, Is.InRange(3f - EPSILON, 3f + EPSILON));
-            Assert.That(point.y, Is.InRange(1f - EPSILON, 1f + EPSILON));
+            Assert.IsTrue(point.x >= 3f - EPSILON && point.x <= 3f + EPSILON);
+            Assert.IsTrue(point.y >= 1f - EPSILON && point.y <= 1f + EPSILON);
         }
 
-        [Test]
+        [TestMethod]
         public void Distance()
         {
             Vec2D point1 = new Vec2D(1, 1);
@@ -53,10 +53,10 @@ namespace com.hexagonsimulations.Geometry.Test
             float length = point1.Distance(point2);
             float expected = (float)(2 * Math.Sqrt(2));
 
-            Assert.That(length, Is.InRange(expected - EPSILON, expected + EPSILON));
+            Assert.IsTrue(length >= expected - EPSILON && length <= expected + EPSILON);
         }
 
-        [Test]
+        [TestMethod]
         public void Length()
         {
             Vec2D point = new Vec2D(2, 2);
@@ -64,7 +64,7 @@ namespace com.hexagonsimulations.Geometry.Test
             float length = point.Length();
             float expected = (float)(2 * Math.Sqrt(2));
 
-            Assert.That(length, Is.InRange(expected - EPSILON, expected + EPSILON));
+            Assert.IsTrue(length >= expected - EPSILON && length <= expected + EPSILON);
         }
     }
 }

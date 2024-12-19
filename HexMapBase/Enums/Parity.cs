@@ -1,4 +1,4 @@
-﻿namespace com.hexagonsimulations.Geometry.Hex.Enums
+﻿namespace com.hexagonsimulations.HexMapBase.Geometry.Hex.Enums
 {
     /// <summary>
     /// Represents the row-parity of an OffsetHexCoord (although it can represent the parity of 
