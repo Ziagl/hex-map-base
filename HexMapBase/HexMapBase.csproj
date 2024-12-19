@@ -11,7 +11,7 @@
     <Copyright>Hexagon Simulations</Copyright>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<PackageId>$(AssemblyName)</PackageId>
-	<Version>0.1.11</Version>
+	<Version>0.2.0</Version>
 	<Title>Hexagon Map Library</Title>
 	<Authors>Werner Ziegelwanger</Authors>
 	<PackageIcon>icon.png</PackageIcon>
