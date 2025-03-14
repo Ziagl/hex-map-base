@@ -1,8 +1,7 @@
-﻿namespace com.hexagonsimulations.HexMapBase.Geometry.Hex.Enums
+﻿namespace com.hexagonsimulations.HexMapBase.Enums;
+
+public enum Triangle
 {
-    public enum Triangle
-	{
-		Top,
-		Bottom,
-	}
+	Top,
+	Bottom,
 }
