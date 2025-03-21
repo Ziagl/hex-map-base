@@ -4,7 +4,7 @@
 /// This is the interface for all game objects that can e involved into combat.
 /// They have values for attack and defence and health.
 /// </summary>
-public interface ICombatEntity
+public interface ICombatEntity : IBaseEntity
 {
     // health
     public int Health { get; set; }     // current health of the entity

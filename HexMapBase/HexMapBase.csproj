@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <OutputType>Library</OutputType>
-    <RootNamespace>com.hexagonsimulations</RootNamespace>
+    <RootNamespace>com.hexagonsimulations.HexMapBase</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AssemblyTitle>HexMapBase</AssemblyTitle>
     <Description>A hexagon grid implementation of http://www.redblobgames.com/grids/hexagons/.</Description>
@@ -11,7 +11,7 @@
     <Copyright>Hexagon Simulations</Copyright>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<PackageId>$(AssemblyName)</PackageId>
-	<Version>0.3.4</Version>
+	<Version>0.3.5</Version>
 	<Title>Hexagon Map Library</Title>
 	<Authors>Werner Ziegelwanger</Authors>
 	<PackageIcon>icon.png</PackageIcon>
