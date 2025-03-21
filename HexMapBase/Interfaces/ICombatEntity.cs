@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
-namespace com.hexagonsimulations.Geometry.Hex.Interfaces;
+﻿namespace com.hexagonsimulations.HexMapBase.Interfaces;
 
 /// <summary>
 /// This is the interface for all game objects that can e involved into combat.

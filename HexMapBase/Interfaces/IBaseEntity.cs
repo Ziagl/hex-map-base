@@ -1,4 +1,4 @@
-﻿namespace com.hexagonsimulations.Geometry.Hex.Interfaces;
+﻿namespace com.hexagonsimulations.HexMapBase.Interfaces;
 
 /// <summary>
 /// This is the base interface for all game objects that can be placed on the map.
