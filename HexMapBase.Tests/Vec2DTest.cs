@@ -45,6 +45,62 @@ public sealed class Vec2DTest
     }
 
     [TestMethod]
+    public void OperatorMultiply()
+    {
+        Vec2D point = new Vec2D(1f, 1f) * 3f;
+        Assert.IsTrue(point.x >= 3f - EPSILON && point.x <= 3f + EPSILON);
+        Assert.IsTrue(point.y >= 3f - EPSILON && point.y <= 3f + EPSILON);
+    }
+
+    [TestMethod]
+    public void OperatorCompare()
+    {
+        Vec2D point1 = new Vec2D(1f, 1f);
+        Vec2D point2 = new Vec2D(1f, 1f);
+        Assert.IsTrue(point1 == point2);
+    }
+
+    [TestMethod]
+    public void OperatorNotEqual()
+    {
+        Vec2D point1 = new Vec2D(1f, 1f);
+        Vec2D point2 = new Vec2D(2f, 2f);
+        Assert.IsTrue(point1 != point2);
+    }
+
+    [TestMethod]
+    public void Rotate()
+    {
+        Vec2D point = new Vec2D(1, 0);
+        Vec2D rotated = Vec2D.Rotate(point, 90);
+        Assert.IsTrue(rotated.x >= 0 - EPSILON && rotated.x <= 0 + EPSILON);
+        Assert.IsTrue(rotated.y >= 1 - EPSILON && rotated.y <= 1 + EPSILON);
+    
+        rotated = Vec2D.Rotate(point, -90);
+        Assert.IsTrue(rotated.x >= 0 - EPSILON && rotated.x <= 0 + EPSILON);
+        Assert.IsTrue(rotated.y >= -1 - EPSILON && rotated.y <= -1 + EPSILON);
+    }
+
+    [TestMethod]
+    public void Normalize()
+    {
+        Vec2D point = new Vec2D(256, 0);
+        Vec2D normalized = Vec2D.Normalize(point);
+        Assert.IsTrue(normalized.x >= 1 - EPSILON && normalized.x <= 1 + EPSILON);
+        Assert.IsTrue(normalized.y >= 0 - EPSILON && normalized.y <= 0 + EPSILON);
+    }
+
+    [TestMethod]
+    public void DotProduct()
+    {
+        Vec2D point1 = new Vec2D(1, 1);
+        Vec2D point2 = new Vec2D(2, 2);
+        double dotProduct = Vec2D.DotProduct(point1, point2);
+        double expected = 4;
+        Assert.IsTrue(dotProduct >= expected - EPSILON && dotProduct <= expected + EPSILON);
+    }
+
+    [TestMethod]
     public void Distance()
     {
         Vec2D point1 = new Vec2D(1, 1);
