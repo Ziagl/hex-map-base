@@ -14,4 +14,6 @@ public interface ICombatEntity : IBaseEntity
     public int CombatStrength { get; set; } // attack and defense points (damage in fight)
     public int RangedAttack { get; set; } // ranged attack points (damage of airstrike)
     public int Range { get; set; }      // attack range (how far can this unit attack)
+    // random numbers
+    public int Seed { get; set; }       // random number seed for this unit for this turn
 }
