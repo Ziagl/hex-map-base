@@ -11,8 +11,7 @@ public interface ICombatEntity : IBaseEntity
     public int MaxHealth { get; set; }  // maximum health of the entity
     // combat
     public int WeaponType { get; set; } // type of weapon/combat of this unit (infantry, cavalry, ...)
-    public int Attack { get; set; }     // attack points (damage in fight)
+    public int CombatStrength { get; set; } // attack and defense points (damage in fight)
     public int RangedAttack { get; set; } // ranged attack points (damage of airstrike)
-    public int Defense { get; set; }    // defence points (how much damage is reduced)
     public int Range { get; set; }      // attack range (how far can this unit attack)
 }
