@@ -90,4 +90,12 @@ public sealed class OffsetCoordinatesTest
         Assert.IsTrue(new OffsetCoordinates(1, 2) != new OffsetCoordinates(3, 4));
         Assert.IsFalse(new OffsetCoordinates(1, 2) != new OffsetCoordinates(1, 2));
     }
+
+    [TestMethod]
+    public void ToString()
+    {
+        OffsetCoordinates offset = new OffsetCoordinates(1, 2);
+        string result = offset.ToString();
+        Assert.AreEqual("OffsetCoordinates(1, 2)", result);
+    }
 }

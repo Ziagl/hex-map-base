@@ -120,4 +120,13 @@ public struct AxialCoordinates
 
         return (this.q == other.q) && (this.r == other.r);
     }
+
+    /// <summary>
+    /// Returns a string representation of the axial coordinates.
+    /// </summary>
+    /// <returns>A string in the format "AxialCoordinates(q, r)" where q and r are the coordinate values.</returns>
+    public override string ToString()
+    {
+        return $"AxialCoordinates({q}, {r})";
+    }
 }

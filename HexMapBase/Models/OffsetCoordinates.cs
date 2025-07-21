@@ -140,4 +140,13 @@ public struct OffsetCoordinates
 
         return (this.x == other.x) && (this.y == other.y);
     }
+
+    /// <summary>
+    /// Returns a string representation of the offset coordinates.
+    /// </summary>
+    /// <returns>A string in the format "OffsetCoordinates(x, y)" where x and y are the coordinate values.</returns>
+    public override string ToString()
+    {
+        return $"OffsetCoordinates({x}, {y})";
+    }
 }

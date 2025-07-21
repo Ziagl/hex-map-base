@@ -64,4 +64,12 @@ public sealed class AxialCoordinatesTest
         Assert.IsTrue(new AxialCoordinates(1, 2) != new AxialCoordinates(3, 4));
         Assert.IsFalse(new AxialCoordinates(1, 2) != new AxialCoordinates(1, 2));
     }
+
+    [TestMethod]
+    public void ToString()
+    {
+        AxialCoordinates axial = new AxialCoordinates(1, 2);
+        string result = axial.ToString();
+        Assert.AreEqual("AxialCoordinates(1, 2)", result);
+    }
 }

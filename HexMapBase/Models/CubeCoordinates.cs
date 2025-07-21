@@ -681,4 +681,13 @@ public struct CubeCoordinates
 
         return result;
     }
+
+    /// <summary>
+    /// Returns a string representation of the cube coordinates.
+    /// </summary>
+    /// <returns>A string in the format "CubeCoordinates(q, r, s)" where q, r, and s are the coordinate values.</returns>
+    public override string ToString()
+    {
+        return $"CubeCoordinates({q}, {r}, {s})";
+    }
 }

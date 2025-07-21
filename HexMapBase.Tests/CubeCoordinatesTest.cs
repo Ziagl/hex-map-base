@@ -506,4 +506,12 @@ public sealed class CubeCoordinatesTest
             }
         );
     }
+
+    [TestMethod]
+    public void ToString()
+    {
+        CubeCoordinates cubic = new CubeCoordinates(1, 2, 3);
+        string result = cubic.ToString();
+        Assert.AreEqual("CubeCoordinates(1, 2, 3)", result);
+    }
 }
