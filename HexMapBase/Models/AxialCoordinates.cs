@@ -1,4 +1,10 @@
-﻿namespace com.hexagonsimulations.HexMapBase.Models;
+﻿using System;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
+namespace com.hexagonsimulations.HexMapBase.Models;
 
 /// <summary>
 /// Represents the position of a hex within a hex grid using axial coordinates (q = East,
@@ -9,10 +15,33 @@
 /// computations than CubeCoordinate, as all of the work has to be done by the CubeCoordinate
 /// type and converting between AxialCoordinale and CubeCoordinate is a small cost every time
 /// a result must be obtained.</remarks>
-public struct AxialCoordinates
+[Serializable]
+[StructLayout(LayoutKind.Sequential)]
+public struct AxialCoordinates : IEquatable<AxialCoordinates>
 {
+    // Public fields preserved for backward compatibility with existing code/tests.
+    // System.Text.Json does not serialize fields unless IncludeFields = true (handled in JsonOptions).
+    [DataMember(Order = 1)]
+    [JsonInclude]
     public int q;
+
+    [DataMember(Order = 2)]
+    [JsonInclude]
     public int r;
+
+    /// <summary>
+    /// Size in bytes when serialized as two little-endian 32-bit integers.
+    /// </summary>
+    public const int ByteSize = sizeof(int) * 2;
+
+    /// <summary>
+    /// Default JSON serializer options (enables field inclusion).
+    /// </summary>
+    public static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions
+    {
+        IncludeFields = true,
+        WriteIndented = false
+    };
 
     /// <summary>
     /// Create a new AxialCoordinate given the coordinates q and r.
@@ -34,8 +63,58 @@ public struct AxialCoordinates
         int x = this.q;
         int z = this.r;
         int y = -x - z;
-
         return new CubeCoordinates(x, y, z);
+    }
+
+    /// <summary>
+    /// Serialize this instance to JSON.
+    /// </summary>
+    public string ToJson(JsonSerializerOptions options = null) =>
+        JsonSerializer.Serialize(this, options ?? JsonOptions);
+
+    /// <summary>
+    /// Deserialize from JSON into an AxialCoordinates instance.
+    /// </summary>
+    public static AxialCoordinates FromJson(string json, JsonSerializerOptions options = null) =>
+        JsonSerializer.Deserialize<AxialCoordinates>(json, options ?? JsonOptions);
+
+    /// <summary>
+    /// Write this instance as two 32-bit ints (q, r) to a BinaryWriter.
+    /// </summary>
+    public void Write(System.IO.BinaryWriter writer)
+    {
+        writer.Write(q);
+        writer.Write(r);
+    }
+
+    /// <summary>
+    /// Read an AxialCoordinates written by Write().
+    /// </summary>
+    public static AxialCoordinates Read(System.IO.BinaryReader reader) =>
+        new AxialCoordinates(reader.ReadInt32(), reader.ReadInt32());
+
+    /// <summary>
+    /// Write to a byte span (little-endian). Returns false if destination too small.
+    /// </summary>
+    public bool TryWriteBytes(Span<byte> destination)
+    {
+        if (destination.Length < ByteSize) return false;
+        System.Buffers.Binary.BinaryPrimitives.WriteInt32LittleEndian(destination.Slice(0, 4), q);
+        System.Buffers.Binary.BinaryPrimitives.WriteInt32LittleEndian(destination.Slice(4, 4), r);
+        return true;
+    }
+
+    /// <summary>
+    /// Read from a span previously written by TryWriteBytes.
+    /// </summary>
+    public static bool TryRead(ReadOnlySpan<byte> source, out AxialCoordinates value)
+    {
+        value = default;
+        if (source.Length < ByteSize) return false;
+        int q = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(source.Slice(0, 4));
+        int r = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(source.Slice(4, 4));
+        value = new AxialCoordinates(q, r);
+        return true;
     }
 
     /// <summary>
@@ -100,26 +179,9 @@ public struct AxialCoordinates
         return hash;
     }
 
-    /// <summary>
-    /// Check if this AxialCoordinate is equal to an arbitrary object.
-    /// </summary>
-    /// <returns>Whether or not this AxialCoordinate and the given object are equal.</returns>
-    public override bool Equals(object obj)
-    {
-        if (obj == null)
-        {
-            return false;
-        }
+    public bool Equals(AxialCoordinates other) => (q == other.q) && (r == other.r);
 
-        if (GetType() != obj.GetType())
-        {
-            return false;
-        }
-
-        AxialCoordinates other = (AxialCoordinates)obj;
-
-        return (this.q == other.q) && (this.r == other.r);
-    }
+    public override bool Equals(object obj) => obj is AxialCoordinates other && Equals(other);
 
     /// <summary>
     /// Returns a string representation of the axial coordinates.

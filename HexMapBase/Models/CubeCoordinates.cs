@@ -1,5 +1,9 @@
 ﻿using com.hexagonsimulations.HexMapBase.Enums;
 using System;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace com.hexagonsimulations.HexMapBase.Models;
 
@@ -17,15 +21,96 @@ namespace com.hexagonsimulations.HexMapBase.Models;
 /// is the most efficient to use, but is the least practical for end-user grid
 /// implementations. Simply keep a CubeCoordinate to do the work and allow it to return results
 /// that you can convert to other types.</remarks>
-public struct CubeCoordinates
+[Serializable]
+[StructLayout(LayoutKind.Sequential)]
+public struct CubeCoordinates : IEquatable<CubeCoordinates>
 {
+    // NOTE: These are public fields for backward compatibility with existing code/tests.
+    // System.Text.Json does NOT serialize public fields by default unless IncludeFields = true.
+    // See the static JsonOptions below.
+    [DataMember(Order = 1)]
+    [JsonInclude]
     public int q;
+
+    [DataMember(Order = 2)]
+    [JsonInclude]
     public int r;
+
+    [DataMember(Order = 3)]
+    [JsonInclude]
     public int s;
+
+    /// <summary>
+    /// Size in bytes when written as three little-endian 32-bit integers.
+    /// </summary>
+    public const int ByteSize = sizeof(int) * 3;
+
+    /// <summary>
+    /// Default options for JSON (enables field inclusion).
+    /// </summary>
+    public static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions
+    {
+        IncludeFields = true,
+        WriteIndented = false
+    };
+
+    /// <summary>
+    /// Serialize this instance to JSON.
+    /// </summary>
+    public string ToJson(JsonSerializerOptions options = null) =>
+        JsonSerializer.Serialize(this, options ?? JsonOptions);
+
+    /// <summary>
+    /// Deserialize from JSON into a <see cref="CubeCoordinates"/>.
+    /// </summary>
+    public static CubeCoordinates FromJson(string json, JsonSerializerOptions options = null) =>
+        JsonSerializer.Deserialize<CubeCoordinates>(json, options ?? JsonOptions);
+
+    /// <summary>
+    /// Write this instance in binary form (q,r,s as 32-bit ints) to a <see cref="System.IO.BinaryWriter"/>.
+    /// </summary>
+    public void Write(System.IO.BinaryWriter writer)
+    {
+        writer.Write(q);
+        writer.Write(r);
+        writer.Write(s);
+    }
+
+    /// <summary>
+    /// Read an instance written by <see cref="Write(System.IO.BinaryWriter)"/>.
+    /// </summary>
+    public static CubeCoordinates Read(System.IO.BinaryReader reader) =>
+        new CubeCoordinates(reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32());
+
+    /// <summary>
+    /// Write to a span (little-endian). Returns false if span too small.
+    /// </summary>
+    public bool TryWriteBytes(Span<byte> destination)
+    {
+        if (destination.Length < ByteSize) return false;
+        System.Buffers.Binary.BinaryPrimitives.WriteInt32LittleEndian(destination.Slice(0, 4), q);
+        System.Buffers.Binary.BinaryPrimitives.WriteInt32LittleEndian(destination.Slice(4, 4), r);
+        System.Buffers.Binary.BinaryPrimitives.WriteInt32LittleEndian(destination.Slice(8, 4), s);
+        return true;
+    }
+
+    /// <summary>
+    /// Read from a span previously written by <see cref="TryWriteBytes"/>.
+    /// </summary>
+    public static bool TryRead(ReadOnlySpan<byte> source, out CubeCoordinates value)
+    {
+        value = default;
+        if (source.Length < ByteSize) return false;
+        int q = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(source.Slice(0, 4));
+        int r = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(source.Slice(4, 4));
+        int s = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(source.Slice(8, 4));
+        value = new CubeCoordinates(q, r, s);
+        return true;
+    }
 
     private static CubeCoordinates GetDirection(Direction direction)
     {
-        switch(direction)
+        switch (direction)
         {
             case Direction.E:
                 return new CubeCoordinates(1, 0, -1);
@@ -46,7 +131,7 @@ public struct CubeCoordinates
 
     private static CubeCoordinates GetDiagonal(Diagonal diagonal)
     {
-        switch(diagonal)
+        switch (diagonal)
         {
             case Enums.Diagonal.ESE:
                 return new CubeCoordinates(1, 1, -2);
@@ -176,25 +261,15 @@ public struct CubeCoordinates
         return hash;
     }
 
-    /// <summary>
-    /// Check if this CubeCoordinate is equal to an arbitrary object.
-    /// </summary>
-    /// <returns>Whether or not this CubeCoordinate and the given object are equal.</returns>
+    public bool Equals(CubeCoordinates other) => (q == other.q) && (r == other.r) && (s == other.s);
+
     public override bool Equals(object obj)
     {
-        if (obj == null)
+        if (obj is CubeCoordinates other)
         {
-            return false;
+            return Equals(other);
         }
-
-        if (GetType() != obj.GetType())
-        {
-            return false;
-        }
-
-        CubeCoordinates other = (CubeCoordinates)obj;
-
-        return (this.q == other.q) && (this.r == other.r) && (this.s == other.s);
+        return false;
     }
 
     /// <summary>

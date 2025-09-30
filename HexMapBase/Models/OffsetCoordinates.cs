@@ -1,4 +1,9 @@
 ﻿using com.hexagonsimulations.HexMapBase.Enums;
+using System;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace com.hexagonsimulations.HexMapBase.Models;
 
@@ -12,32 +17,45 @@ namespace com.hexagonsimulations.HexMapBase.Models;
 /// computations, as all of the work has to be done by the CubeCoordinate type and converting
 /// between OffsetCoordinate and CubeCoordinate is the most computationally expensive of the
 /// type conversions provided by this library.</remarks>
-public struct OffsetCoordinates
+[Serializable]
+[StructLayout(LayoutKind.Sequential)]
+public struct OffsetCoordinates : IEquatable<OffsetCoordinates>
 {
+    [DataMember(Order = 1)]
+    [JsonInclude]
     public int x;
+
+    [DataMember(Order = 2)]
+    [JsonInclude]
     public int y;
+
+    /// <summary>
+    /// Size in bytes when written as two little-endian 32-bit integers.
+    /// </summary>
+    public const int ByteSize = sizeof(int) * 2;
+
+    /// <summary>
+    /// Default JSON options (IncludeFields = true to serialize public fields).
+    /// </summary>
+    public static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions
+    {
+        IncludeFields = true,
+        WriteIndented = false
+    };
 
     /// <summary>
     /// Return whether or not this hex belongs to an odd-numbered row.
     /// </summary>
-    public bool IsOddRow
-    {
-        get { return (this.RowParity == Parity.Odd); }
-    }
+    public bool IsOddRow => (RowParity == Parity.Odd);
 
     /// <summary>
     /// Return the row parity of the hex (whether its row number is even or odd).
     /// </summary>
-    public Parity RowParity
-    {
-        get { return (Parity)(this.y & 1); }
-    }
+    public Parity RowParity => (Parity)(this.y & 1);
 
     /// <summary>
-    /// Create a new OffsetHexCoord given the coordinates q and r.
+    /// Create a new OffsetHexCoord given the coordinates x and y.
     /// </summary>
-    /// <param name="x">The column position of the hex within the grid.</param>
-    /// <param name="y">The row position of the hex within the grid.</param>
     public OffsetCoordinates(int x, int y)
     {
         this.x = x;
@@ -47,15 +65,45 @@ public struct OffsetCoordinates
     /// <summary>
     /// Return this hex as a CubeCoordinate.
     /// </summary>
-    /// <returns>A CubeCoordinate representing the hex.</returns>
     public CubeCoordinates ToCubic()
     {
-        // Made a scary change here. Expect this to break!
         int q = this.x - (this.y - (int)RowParity) / 2;
         int r = this.y;
         int s = -q - r;
-
         return new CubeCoordinates(q, r, s);
+    }
+
+    public string ToJson(JsonSerializerOptions options = null) =>
+        JsonSerializer.Serialize(this, options ?? JsonOptions);
+
+    public static OffsetCoordinates FromJson(string json, JsonSerializerOptions options = null) =>
+        JsonSerializer.Deserialize<OffsetCoordinates>(json, options ?? JsonOptions);
+
+    public void Write(System.IO.BinaryWriter writer)
+    {
+        writer.Write(x);
+        writer.Write(y);
+    }
+
+    public static OffsetCoordinates Read(System.IO.BinaryReader reader) =>
+        new OffsetCoordinates(reader.ReadInt32(), reader.ReadInt32());
+
+    public bool TryWriteBytes(Span<byte> destination)
+    {
+        if (destination.Length < ByteSize) return false;
+        System.Buffers.Binary.BinaryPrimitives.WriteInt32LittleEndian(destination.Slice(0, 4), x);
+        System.Buffers.Binary.BinaryPrimitives.WriteInt32LittleEndian(destination.Slice(4, 4), y);
+        return true;
+    }
+
+    public static bool TryRead(ReadOnlySpan<byte> source, out OffsetCoordinates value)
+    {
+        value = default;
+        if (source.Length < ByteSize) return false;
+        int x = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(source.Slice(0, 4));
+        int y = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(source.Slice(4, 4));
+        value = new OffsetCoordinates(x, y);
+        return true;
     }
 
     /// <summary>
@@ -108,6 +156,10 @@ public struct OffsetCoordinates
         return (lhs.x != rhs.x) || (lhs.y != rhs.y);
     }
 
+    public bool Equals(OffsetCoordinates other) => (x == other.x) && (y == other.y);
+
+    public override bool Equals(object obj) => obj is OffsetCoordinates other && Equals(other);
+
     /// <summary>
     /// Get a hash reflecting the contents of the OffsetCoordinate.
     /// </summary>
@@ -121,32 +173,8 @@ public struct OffsetCoordinates
     }
 
     /// <summary>
-    /// Check if this OffsetCoordinate is equal to an arbitrary object.
-    /// </summary>
-    /// <returns>Whether or not this OffsetCoordinate and the given object are equal.</returns>
-    public override bool Equals(object obj)
-    {
-        if (obj == null)
-        {
-            return false;
-        }
-
-        if (GetType() != obj.GetType())
-        {
-            return false;
-        }
-
-        OffsetCoordinates other = (OffsetCoordinates)obj;
-
-        return (this.x == other.x) && (this.y == other.y);
-    }
-
-    /// <summary>
     /// Returns a string representation of the offset coordinates.
     /// </summary>
     /// <returns>A string in the format "OffsetCoordinates(x, y)" where x and y are the coordinate values.</returns>
-    public override string ToString()
-    {
-        return $"OffsetCoordinates({x}, {y})";
-    }
+    public override string ToString() => $"OffsetCoordinates({x}, {y})";
 }

@@ -72,4 +72,36 @@ public sealed class AxialCoordinatesTest
         string result = axial.ToString();
         Assert.AreEqual("AxialCoordinates(1, 2)", result);
     }
+
+    [TestMethod]
+    public void SerializationDeserialization()
+    {
+        var original = new AxialCoordinates(5, -3);
+
+        // JSON
+        string json = original.ToJson();
+        var fromJson = AxialCoordinates.FromJson(json);
+        Assert.AreEqual(original, fromJson, "JSON serialization/deserialization failed");
+
+        // Binary
+        using var ms = new MemoryStream();
+        using (var bw = new BinaryWriter(ms, System.Text.Encoding.UTF8, leaveOpen: true))
+        {
+            original.Write(bw);
+        }
+        ms.Position = 0;
+        AxialCoordinates fromBinary;
+        using (var br = new BinaryReader(ms, System.Text.Encoding.UTF8, leaveOpen: false))
+        {
+            fromBinary = AxialCoordinates.Read(br);
+        }
+        Assert.AreEqual(original, fromBinary, "Binary serialization/deserialization failed");
+
+        // Span
+        Span<byte> buffer = stackalloc byte[AxialCoordinates.ByteSize];
+        Assert.IsTrue(original.TryWriteBytes(buffer), "Span write failed");
+        bool ok = AxialCoordinates.TryRead(buffer, out var fromSpan);
+        Assert.IsTrue(ok, "Span read failed");
+        Assert.AreEqual(original, fromSpan, "Span serialization/deserialization failed");
+    }
 }

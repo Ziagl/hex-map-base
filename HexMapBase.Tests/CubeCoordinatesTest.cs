@@ -389,7 +389,7 @@ public sealed class CubeCoordinatesTest
         CubeCoordinates startCubic = new CubeCoordinates(1, 0, -1);
         CubeCoordinates endCubic = new CubeCoordinates(-2, 2, 0);
         CubeCoordinates[] line = CubeCoordinates.Line(startCubic, endCubic);
-        
+
         CollectionAssert.AreEquivalent(
             line,
             new CubeCoordinates[4]
@@ -513,5 +513,37 @@ public sealed class CubeCoordinatesTest
         CubeCoordinates cubic = new CubeCoordinates(1, 2, 3);
         string result = cubic.ToString();
         Assert.AreEqual("CubeCoordinates(1, 2, 3)", result);
+    }
+
+    [TestMethod]
+    public void SerializationDeserialization()
+    {
+        var original = new CubeCoordinates(3, -2, -1); // q + r + s = 0 invariant
+
+        // JSON
+        string json = original.ToJson();
+        var fromJson = CubeCoordinates.FromJson(json);
+        Assert.AreEqual(original, fromJson, "JSON serialization/deserialization failed");
+
+        // Binary
+        using var ms = new MemoryStream();
+        using (var bw = new BinaryWriter(ms, System.Text.Encoding.UTF8, leaveOpen: true))
+        {
+            original.Write(bw);
+        }
+        ms.Position = 0;
+        CubeCoordinates fromBinary;
+        using (var br = new BinaryReader(ms, System.Text.Encoding.UTF8, leaveOpen: false))
+        {
+            fromBinary = CubeCoordinates.Read(br);
+        }
+        Assert.AreEqual(original, fromBinary, "Binary serialization/deserialization failed");
+
+        // Span-based
+        Span<byte> buffer = stackalloc byte[CubeCoordinates.ByteSize];
+        Assert.IsTrue(original.TryWriteBytes(buffer), "Span write failed");
+        bool readOk = CubeCoordinates.TryRead(buffer, out var fromSpan);
+        Assert.IsTrue(readOk, "Span read failed");
+        Assert.AreEqual(original, fromSpan, "Span serialization/deserialization failed");
     }
 }

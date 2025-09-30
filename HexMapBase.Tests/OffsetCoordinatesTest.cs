@@ -1,5 +1,6 @@
 ﻿using com.hexagonsimulations.HexMapBase.Enums;
 using com.hexagonsimulations.HexMapBase.Models;
+using System.Text;
 
 namespace com.hexagonsimulations.HexMapBase.Tests;
 
@@ -97,5 +98,37 @@ public sealed class OffsetCoordinatesTest
         OffsetCoordinates offset = new OffsetCoordinates(1, 2);
         string result = offset.ToString();
         Assert.AreEqual("OffsetCoordinates(1, 2)", result);
+    }
+
+    [TestMethod]
+    public void SerializationDeserialization()
+    {
+        var original = new OffsetCoordinates(7, -3);
+
+        // JSON round-trip
+        string json = original.ToJson();
+        var fromJson = OffsetCoordinates.FromJson(json);
+        Assert.AreEqual(original, fromJson, "JSON serialization/deserialization failed");
+
+        // Binary round-trip
+        using var ms = new MemoryStream();
+        using (var bw = new BinaryWriter(ms, Encoding.UTF8, leaveOpen: true))
+        {
+            original.Write(bw);
+        }
+        ms.Position = 0;
+        OffsetCoordinates fromBinary;
+        using (var br = new BinaryReader(ms, Encoding.UTF8, leaveOpen: false))
+        {
+            fromBinary = OffsetCoordinates.Read(br);
+        }
+        Assert.AreEqual(original, fromBinary, "Binary serialization/deserialization failed");
+
+        // Span-based round-trip
+        Span<byte> buffer = stackalloc byte[OffsetCoordinates.ByteSize];
+        Assert.IsTrue(original.TryWriteBytes(buffer), "Span write failed");
+        bool ok = OffsetCoordinates.TryRead(buffer, out var fromSpan);
+        Assert.IsTrue(ok, "Span read failed");
+        Assert.AreEqual(original, fromSpan, "Span serialization/deserialization failed");
     }
 }
