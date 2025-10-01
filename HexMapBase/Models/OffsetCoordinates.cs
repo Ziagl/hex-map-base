@@ -19,6 +19,7 @@ namespace com.hexagonsimulations.HexMapBase.Models;
 /// type conversions provided by this library.</remarks>
 [Serializable]
 [StructLayout(LayoutKind.Sequential)]
+[JsonConverter(typeof(OffsetCoordinatesJsonConverter))]
 public struct OffsetCoordinates : IEquatable<OffsetCoordinates>
 {
     [DataMember(Order = 1)]
@@ -177,4 +178,85 @@ public struct OffsetCoordinates : IEquatable<OffsetCoordinates>
     /// </summary>
     /// <returns>A string in the format "OffsetCoordinates(x, y)" where x and y are the coordinate values.</returns>
     public override string ToString() => $"OffsetCoordinates({x}, {y})";
+
+    internal string ToKeyString() => $"{x},{y}";
+
+    public static bool TryParseKey(string key, out OffsetCoordinates value)
+    {
+        value = default;
+        if (string.IsNullOrWhiteSpace(key)) return false;
+
+        var parts = key.Split(',');
+        if (parts.Length != 2) return false;
+
+        if (int.TryParse(parts[0], out int x) &&
+            int.TryParse(parts[1], out int y))
+        {
+            value = new OffsetCoordinates(x, y);
+            return true;
+        }
+
+        return false;
+    }
+}
+
+internal sealed class OffsetCoordinatesJsonConverter : JsonConverter<OffsetCoordinates>
+{
+    public override OffsetCoordinates Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType == JsonTokenType.String)
+        {
+            string key = reader.GetString();
+            if (OffsetCoordinates.TryParseKey(key, out var value))
+                return value;
+
+            throw new JsonException($"Invalid OffsetCoordinates key: {key}");
+        }
+
+        if (reader.TokenType != JsonTokenType.StartObject)
+            throw new JsonException("Expected StartObject for OffsetCoordinates.");
+
+        int x = 0, y = 0;
+        while (reader.Read())
+        {
+            if (reader.TokenType == JsonTokenType.EndObject)
+                return new OffsetCoordinates(x, y);
+
+            if (reader.TokenType == JsonTokenType.PropertyName)
+            {
+                string propertyName = reader.GetString();
+                reader.Read();
+
+                switch (propertyName)
+                {
+                    case "x": x = reader.GetInt32(); break;
+                    case "y": y = reader.GetInt32(); break;
+                }
+            }
+        }
+
+        throw new JsonException("Incomplete OffsetCoordinates JSON object.");
+    }
+
+    public override void Write(Utf8JsonWriter writer, OffsetCoordinates value, JsonSerializerOptions options)
+    {
+        writer.WriteStartObject();
+        writer.WriteNumber("x", value.x);
+        writer.WriteNumber("y", value.y);
+        writer.WriteEndObject();
+    }
+
+    public override void WriteAsPropertyName(Utf8JsonWriter writer, OffsetCoordinates value, JsonSerializerOptions options)
+    {
+        writer.WritePropertyName(value.ToKeyString());
+    }
+
+    public override OffsetCoordinates ReadAsPropertyName(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        string key = reader.GetString();
+        if (OffsetCoordinates.TryParseKey(key, out var value))
+            return value;
+
+        throw new JsonException($"Invalid OffsetCoordinates dictionary key: {key}");
+    }
 }

@@ -104,4 +104,21 @@ public sealed class AxialCoordinatesTest
         Assert.IsTrue(ok, "Span read failed");
         Assert.AreEqual(original, fromSpan, "Span serialization/deserialization failed");
     }
+
+    [TestMethod]
+    public void SerializationDeserializationKey()
+    {
+        var directory = new Dictionary<AxialCoordinates, string>()
+        {
+            { new AxialCoordinates(0, 0), "Test1" },
+            { new AxialCoordinates(1, -1), "Test2" },
+            { new AxialCoordinates(-1, 1), "Test3" },
+        };
+
+        string json = System.Text.Json.JsonSerializer.Serialize(directory);
+        var fromJson = System.Text.Json.JsonSerializer.Deserialize<Dictionary<AxialCoordinates, string>>(json);
+
+        Assert.IsNotNull(fromJson);
+        Assert.AreEqual(directory.Count, fromJson.Count);
+    }
 }

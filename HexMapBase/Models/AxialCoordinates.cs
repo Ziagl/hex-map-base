@@ -9,7 +9,7 @@ namespace com.hexagonsimulations.HexMapBase.Models;
 /// <summary>
 /// Represents the position of a hex within a hex grid using axial coordinates (q = East,
 /// r = Southeast). This results in a grid with a naturally parallelgraphic form, but can
-/// still be stored in a regtangular array resulting in a small number of wasted cells.
+/// still be stored in a rectangular array resulting in a small number of wasted cells.
 /// </summary>
 /// <remarks>This type is the less computationally efficient type to use for hex grid
 /// computations than CubeCoordinate, as all of the work has to be done by the CubeCoordinate
@@ -17,10 +17,9 @@ namespace com.hexagonsimulations.HexMapBase.Models;
 /// a result must be obtained.</remarks>
 [Serializable]
 [StructLayout(LayoutKind.Sequential)]
+[JsonConverter(typeof(AxialCoordinatesJsonConverter))]
 public struct AxialCoordinates : IEquatable<AxialCoordinates>
 {
-    // Public fields preserved for backward compatibility with existing code/tests.
-    // System.Text.Json does not serialize fields unless IncludeFields = true (handled in JsonOptions).
     [DataMember(Order = 1)]
     [JsonInclude]
     public int q;
@@ -187,8 +186,86 @@ public struct AxialCoordinates : IEquatable<AxialCoordinates>
     /// Returns a string representation of the axial coordinates.
     /// </summary>
     /// <returns>A string in the format "AxialCoordinates(q, r)" where q and r are the coordinate values.</returns>
-    public override string ToString()
+    public override string ToString() => $"AxialCoordinates({q}, {r})";
+
+    internal string ToKeyString() => $"{q},{r}";
+
+    public static bool TryParseKey(string key, out AxialCoordinates value)
     {
-        return $"AxialCoordinates({q}, {r})";
+        value = default;
+        if (string.IsNullOrWhiteSpace(key)) return false;
+
+        var parts = key.Split(',');
+        if (parts.Length != 2) return false;
+
+        if (int.TryParse(parts[0], out int q) &&
+            int.TryParse(parts[1], out int r))
+        {
+            value = new AxialCoordinates(q, r);
+            return true;
+        }
+
+        return false;
+    }
+}
+
+internal sealed class AxialCoordinatesJsonConverter : JsonConverter<AxialCoordinates>
+{
+    public override AxialCoordinates Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType == JsonTokenType.String)
+        {
+            string key = reader.GetString();
+            if (AxialCoordinates.TryParseKey(key, out var value))
+                return value;
+
+            throw new JsonException($"Invalid AxialCoordinates key: {key}");
+        }
+
+        if (reader.TokenType != JsonTokenType.StartObject)
+            throw new JsonException("Expected StartObject for AxialCoordinates.");
+
+        int q = 0, r = 0;
+        while (reader.Read())
+        {
+            if (reader.TokenType == JsonTokenType.EndObject)
+                return new AxialCoordinates(q, r);
+
+            if (reader.TokenType == JsonTokenType.PropertyName)
+            {
+                string propertyName = reader.GetString();
+                reader.Read();
+
+                switch (propertyName)
+                {
+                    case "q": q = reader.GetInt32(); break;
+                    case "r": r = reader.GetInt32(); break;
+                }
+            }
+        }
+
+        throw new JsonException("Incomplete AxialCoordinates JSON object.");
+    }
+
+    public override void Write(Utf8JsonWriter writer, AxialCoordinates value, JsonSerializerOptions options)
+    {
+        writer.WriteStartObject();
+        writer.WriteNumber("q", value.q);
+        writer.WriteNumber("r", value.r);
+        writer.WriteEndObject();
+    }
+
+    public override void WriteAsPropertyName(Utf8JsonWriter writer, AxialCoordinates value, JsonSerializerOptions options)
+    {
+        writer.WritePropertyName(value.ToKeyString());
+    }
+
+    public override AxialCoordinates ReadAsPropertyName(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        string key = reader.GetString();
+        if (AxialCoordinates.TryParseKey(key, out var value))
+            return value;
+
+        throw new JsonException($"Invalid AxialCoordinates dictionary key: {key}");
     }
 }

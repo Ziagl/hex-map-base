@@ -546,4 +546,21 @@ public sealed class CubeCoordinatesTest
         Assert.IsTrue(readOk, "Span read failed");
         Assert.AreEqual(original, fromSpan, "Span serialization/deserialization failed");
     }
+
+    [TestMethod]
+    public void SerializationDeserializationKey()
+    {
+        var directory = new Dictionary<CubeCoordinates, string>()
+        {
+            { new CubeCoordinates(0, 0, 0), "Test1" },
+            { new CubeCoordinates(1, -1, 0), "Test2" }, 
+            { new CubeCoordinates(-1, 1, 0), "Test3" },
+        };
+
+        string json = System.Text.Json.JsonSerializer.Serialize(directory);
+        var fromJson = System.Text.Json.JsonSerializer.Deserialize<Dictionary<CubeCoordinates, string>>(json);
+
+        Assert.IsNotNull(fromJson);
+        Assert.AreEqual(directory.Count, fromJson.Count);
+    }
 }

@@ -23,6 +23,7 @@ namespace com.hexagonsimulations.HexMapBase.Models;
 /// that you can convert to other types.</remarks>
 [Serializable]
 [StructLayout(LayoutKind.Sequential)]
+[JsonConverter(typeof(CubeCoordinatesJsonConverter))]
 public struct CubeCoordinates : IEquatable<CubeCoordinates>
 {
     // NOTE: These are public fields for backward compatibility with existing code/tests.
@@ -46,13 +47,20 @@ public struct CubeCoordinates : IEquatable<CubeCoordinates>
     public const int ByteSize = sizeof(int) * 3;
 
     /// <summary>
-    /// Default options for JSON (enables field inclusion).
+    /// Default options for JSON (includes a converter that also supports Dictionary keys).
     /// </summary>
-    public static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions
+    public static readonly JsonSerializerOptions JsonOptions = CreateDefaultJsonOptions();
+
+    private static JsonSerializerOptions CreateDefaultJsonOptions()
     {
-        IncludeFields = true,
-        WriteIndented = false
-    };
+        var opts = new JsonSerializerOptions
+        {
+            IncludeFields = true,
+            WriteIndented = false
+        };
+        opts.Converters.Add(new CubeCoordinatesJsonConverter());
+        return opts;
+    }
 
     /// <summary>
     /// Serialize this instance to JSON.
@@ -753,16 +761,101 @@ public struct CubeCoordinates : IEquatable<CubeCoordinates>
             ring.CopyTo(result, arrayIndex);
             arrayIndex += ring.Length;
         }
-
         return result;
     }
 
+    public override string ToString() => $"CubeCoordinates({q}, {r}, {s})";
+
     /// <summary>
-    /// Returns a string representation of the cube coordinates.
+    /// Converts CubeCoordinates to a string key for dictionary serialization.
     /// </summary>
-    /// <returns>A string in the format "CubeCoordinates(q, r, s)" where q, r, and s are the coordinate values.</returns>
-    public override string ToString()
+    internal string ToKeyString() => $"{q},{r},{s}";
+
+    /// <summary>
+    /// Parses a string key back into CubeCoordinates.
+    /// </summary>
+    public static bool TryParseKey(string key, out CubeCoordinates value)
     {
-        return $"CubeCoordinates({q}, {r}, {s})";
+        value = default;
+        if (string.IsNullOrWhiteSpace(key)) return false;
+
+        var parts = key.Split(',');
+        if (parts.Length != 3) return false;
+
+        if (int.TryParse(parts[0], out int q) &&
+            int.TryParse(parts[1], out int r) &&
+            int.TryParse(parts[2], out int s))
+        {
+            value = new CubeCoordinates(q, r, s);
+            return true;
+        }
+
+        return false;
+    }
+}
+
+/// <summary>
+/// Custom JSON converter for CubeCoordinates, including support for dictionary keys.
+/// </summary>
+internal sealed class CubeCoordinatesJsonConverter : JsonConverter<CubeCoordinates>
+{
+    public override CubeCoordinates Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType == JsonTokenType.String)
+        {
+            string key = reader.GetString();
+            if (CubeCoordinates.TryParseKey(key, out var value))
+                return value;
+
+            throw new JsonException($"Invalid CubeCoordinates key: {key}");
+        }
+
+        if (reader.TokenType != JsonTokenType.StartObject)
+            throw new JsonException("Expected StartObject for CubeCoordinates.");
+
+        int q = 0, r = 0, s = 0;
+        while (reader.Read())
+        {
+            if (reader.TokenType == JsonTokenType.EndObject)
+                return new CubeCoordinates(q, r, s);
+
+            if (reader.TokenType == JsonTokenType.PropertyName)
+            {
+                string propertyName = reader.GetString();
+                reader.Read();
+
+                switch (propertyName)
+                {
+                    case "q": q = reader.GetInt32(); break;
+                    case "r": r = reader.GetInt32(); break;
+                    case "s": s = reader.GetInt32(); break;
+                }
+            }
+        }
+
+        throw new JsonException("Incomplete CubeCoordinates JSON object.");
+    }
+
+    public override void Write(Utf8JsonWriter writer, CubeCoordinates value, JsonSerializerOptions options)
+    {
+        writer.WriteStartObject();
+        writer.WriteNumber("q", value.q);
+        writer.WriteNumber("r", value.r);
+        writer.WriteNumber("s", value.s);
+        writer.WriteEndObject();
+    }
+
+    public override void WriteAsPropertyName(Utf8JsonWriter writer, CubeCoordinates value, JsonSerializerOptions options)
+    {
+        writer.WritePropertyName(value.ToKeyString());
+    }
+
+    public override CubeCoordinates ReadAsPropertyName(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        string key = reader.GetString();
+        if (CubeCoordinates.TryParseKey(key, out var value))
+            return value;
+
+        throw new JsonException($"Invalid CubeCoordinates dictionary key: {key}");
     }
 }

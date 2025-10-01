@@ -131,4 +131,21 @@ public sealed class OffsetCoordinatesTest
         Assert.IsTrue(ok, "Span read failed");
         Assert.AreEqual(original, fromSpan, "Span serialization/deserialization failed");
     }
+
+    [TestMethod]
+    public void SerializationDeserializationKey()
+    {
+        var directory = new Dictionary<OffsetCoordinates, string>()
+        {
+            { new OffsetCoordinates(0, 0), "Test1" },
+            { new OffsetCoordinates(1, -1), "Test2" },
+            { new OffsetCoordinates(-1, 1), "Test3" },
+        };
+
+        string json = System.Text.Json.JsonSerializer.Serialize(directory);
+        var fromJson = System.Text.Json.JsonSerializer.Deserialize<Dictionary<OffsetCoordinates, string>>(json);
+
+        Assert.IsNotNull(fromJson);
+        Assert.AreEqual(directory.Count, fromJson.Count);
+    }
 }
