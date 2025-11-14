@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <OutputType>Library</OutputType>
     <RootNamespace>com.hexagonsimulations.HexMapBase</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -11,7 +11,7 @@
     <Copyright>Hexagon Simulations</Copyright>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<PackageId>$(AssemblyName)</PackageId>
-	<Version>0.4.1</Version>
+	<Version>0.5.0</Version>
 	<Title>Hexagon Map Library</Title>
 	<Authors>Werner Ziegelwanger</Authors>
 	<PackageIcon>icon.png</PackageIcon>
