@@ -119,6 +119,6 @@ public sealed class AxialCoordinatesTest
         var fromJson = System.Text.Json.JsonSerializer.Deserialize<Dictionary<AxialCoordinates, string>>(json);
 
         Assert.IsNotNull(fromJson);
-        Assert.AreEqual(directory.Count, fromJson.Count);
+        Assert.HasCount(directory.Count, fromJson);
     }
 }

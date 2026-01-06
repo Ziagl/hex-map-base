@@ -561,6 +561,6 @@ public sealed class CubeCoordinatesTest
         var fromJson = System.Text.Json.JsonSerializer.Deserialize<Dictionary<CubeCoordinates, string>>(json);
 
         Assert.IsNotNull(fromJson);
-        Assert.AreEqual(directory.Count, fromJson.Count);
+        Assert.HasCount(directory.Count, fromJson);
     }
 }

@@ -146,6 +146,6 @@ public sealed class OffsetCoordinatesTest
         var fromJson = System.Text.Json.JsonSerializer.Deserialize<Dictionary<OffsetCoordinates, string>>(json);
 
         Assert.IsNotNull(fromJson);
-        Assert.AreEqual(directory.Count, fromJson.Count);
+        Assert.HasCount(directory.Count, fromJson);
     }
 }
