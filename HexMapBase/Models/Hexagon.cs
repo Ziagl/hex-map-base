@@ -1,4 +1,8 @@
-﻿namespace com.hexagonsimulations.HexMapBase.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Numerics;
+
+namespace com.hexagonsimulations.HexMapBase.Models;
 
 /// <summary>
 /// A model to perform geometric operations on hexagons. Use for example for hit test (is inside).
@@ -75,4 +79,50 @@ public class Hexagon
 
         return false;
     }
+
+    // generates N uniformly distributed random points inside a stretched hexagon
+    public static List<Vec2D> GeneratePoints(int count, float halfWidth = 1f, float halfHeight = 0.85f)
+    {
+        var points = new List<Vec2D>(count);
+        var rand = new Random();
+
+        for (int i = 0; i < count; i++)
+        {
+            // generate a point uniformly inside a unit hexagon
+            Vec2D p = RandomPointInUnitHex(rand);
+
+            // stretch to desired dimensions
+            p.x *= halfWidth;
+            p.y *= halfHeight;
+
+            points.Add(p);
+        }
+
+        return points;
+    }
+
+    // generates a uniformly distributed point inside a regular hexagon of radius 1
+    private static Vec2D RandomPointInUnitHex(Random rand)
+    {
+        while (true)
+        {
+            // sample inside bounding box [-1,1] x [-sqrt(3)/2, sqrt(3)/2]
+            float x = (float)(rand.NextDouble() * 2 - 1);
+            float y = (float)(rand.NextDouble() * Math.Sqrt(3) - Math.Sqrt(3) / 2);
+
+            if (IsInsideUnitHex(x, y))
+                return new Vec2D(x, y);
+        }
+    }
+
+    // check if point is inside a regular hexagon of radius 1
+    private static bool IsInsideUnitHex(float x, float y)
+    {
+        // hexagon inequality
+        return Math.Abs(x) <= 1 &&
+               Math.Abs(y) <= Math.Sqrt(3) / 2 &&
+               Math.Abs(x) + Math.Abs(y) / Math.Sqrt(3) <= 1;
+    }
+
+
 }
