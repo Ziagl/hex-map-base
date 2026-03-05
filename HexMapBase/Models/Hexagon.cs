@@ -80,25 +80,48 @@ public class Hexagon
         return false;
     }
 
-    // generates N uniformly distributed random points inside a stretched hexagon
-    public static List<Vec2D> GeneratePoints(int count, float halfWidth = 1f, float halfHeight = 0.85f)
+    // generates up to maxCount uniformly distributed random points inside a stretched hexagon,
+    // each at least minDistance apart from all previously placed points
+    public static List<Vec2D> GeneratePoints(int maxCount, float halfWidth = 1f, float halfHeight = 0.85f, float minDistance = 0.05f)
     {
-        var points = new List<Vec2D>(count);
+        var points = new List<Vec2D>(maxCount);
         var rand = new Random();
+        const int maxAttemptsPerPoint = 30;
 
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < maxCount; i++)
         {
-            // generate a point uniformly inside a unit hexagon
-            Vec2D p = RandomPointInUnitHex(rand);
+            bool placed = false;
+            for (int attempt = 0; attempt < maxAttemptsPerPoint; attempt++)
+            {
+                Vec2D p = RandomPointInUnitHex(rand);
+                p.x *= halfWidth;
+                p.y *= halfHeight;
 
-            // stretch to desired dimensions
-            p.x *= halfWidth;
-            p.y *= halfHeight;
+                if (IsFarEnough(p, points, minDistance))
+                {
+                    points.Add(p);
+                    placed = true;
+                    break;
+                }
+            }
 
-            points.Add(p);
+            if (!placed)
+            {
+                break;
+            }
         }
 
         return points;
+    }
+
+    private static bool IsFarEnough(Vec2D point, List<Vec2D> points, float minDistance)
+    {
+        foreach (var p in points)
+        {
+            if (point.Distance(p) < minDistance)
+                return false;
+        }
+        return true;
     }
 
     // generates a uniformly distributed point inside a regular hexagon of radius 1

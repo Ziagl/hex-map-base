@@ -35,23 +35,53 @@ public sealed class HexagonTests
     [TestMethod]
     public void GenerateRandomPoints()
     {
-        var list = Hexagon.GeneratePoints(10);
-        Assert.HasCount(10, list);
+        int count = 10;
+        float minDistance = 0.05f;
+        var list = Hexagon.GeneratePoints(count, minDistance: minDistance);
+        Assert.HasCount(count, list);
         foreach (var point in list)
         {
             Assert.IsTrue(point.x >= -1 && point.x <= 1);
             Assert.IsTrue(point.y >= -0.85 && point.y <= 0.85);
         }
+        for (int i = 0; i < list.Count; i++)
+        {
+            for (int j = i + 1; j < list.Count; j++)
+            {
+                Assert.IsGreaterThanOrEqualTo(minDistance, list[i].Distance(list[j]));
+            }
+        }
 
         int numberOfPoints = 1000;
         float halfWidth = 2.0f;
         float halfHeight = 1.5f;
-        list = Hexagon.GeneratePoints(numberOfPoints, halfWidth, halfHeight);
+        list = Hexagon.GeneratePoints(numberOfPoints, halfWidth, halfHeight, minDistance);
         Assert.HasCount(numberOfPoints, list);
         foreach (var point in list)
         {
             Assert.IsTrue(point.x >= -halfWidth && point.x <= halfWidth);
             Assert.IsTrue(point.y >= -halfHeight && point.y <= halfHeight);
         }
+        for (int i = 0; i < list.Count; i++)
+        {
+            for (int j = i + 1; j < list.Count; j++)
+            {
+                Assert.IsGreaterThanOrEqualTo(minDistance, list[i].Distance(list[j]));
+            }
+        }
+    }
+
+    [TestMethod]
+    public void GenerateRandomPointsExtremeCase()
+    {
+        // hexagon diameter (~0.283) is smaller than minDistance (1.0),
+        // so no two points can ever be 1.0 apart inside it — at most 1 point is placed
+        int maxCount = 100;
+        float halfWidth = 0.1f;
+        float halfHeight = 0.1f;
+        float minDistance = 1.0f;
+        var list = Hexagon.GeneratePoints(maxCount, halfWidth, halfHeight, minDistance);
+        Assert.IsLessThan(maxCount, list.Count);
+        Assert.IsLessThanOrEqualTo(1, list.Count);
     }
 }
