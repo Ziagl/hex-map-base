@@ -80,8 +80,15 @@ public class Hexagon
         return false;
     }
 
-    // generates up to maxCount uniformly distributed random points inside a stretched hexagon,
-    // each at least minDistance apart from all previously placed points
+    /// <summary>
+    /// Generates up to maxCount uniformly distributed random points inside a stretched hexagon,
+    /// each at least minDistance apart from all previously placed points.
+    /// </summary>
+    /// <param name="maxCount">Maximum number of points to generate.</param>
+    /// <param name="halfWidth">Half width of hexagon geometry.</param>
+    /// <param name="halfHeight">Half height of hexagon geometry.</param>
+    /// <param name="minDistance">Minimal distance number should have to all other ppoints.</param>
+    /// <returns>A list containing the random generated points.</returns>
     public static List<Vec2D> GeneratePoints(int maxCount, float halfWidth = 1f, float halfHeight = 0.85f, float minDistance = 0.05f)
     {
         var points = new List<Vec2D>(maxCount);
@@ -108,6 +115,50 @@ public class Hexagon
             if (!placed)
             {
                 break;
+            }
+        }
+
+        return points;
+    }
+
+    /// <summary>
+    /// Generates deterministic points arranged in concentric circles inside a stretched hexagon.
+    /// The first point is always the center. Additional points are placed on evenly spaced
+    /// concentric circles. Points on each circle are evenly distributed, and adjacent circles
+    /// are rotated by half the angular spacing to maximize distances between circles.
+    /// </summary>
+    /// <param name="numberOfCircles">Number of concentric circles around the center.</param>
+    /// <param name="pointsPerCircle">Number of evenly spaced points on each circle.</param>
+    /// <param name="halfWidth">Half-width of the stretched hexagon (default 1).</param>
+    /// <param name="halfHeight">Half-height of the stretched hexagon (default 0.85).</param>
+    /// <returns>A list containing the center point followed by the circle points.</returns>
+    public static List<Vec2D> GenerateCircularPoints(int numberOfCircles, int pointsPerCircle, float halfWidth = 1f, float halfHeight = 0.85f)
+    {
+        var points = new List<Vec2D>(1 + numberOfCircles * pointsPerCircle);
+
+        // center point
+        points.Add(new Vec2D(0, 0));
+
+        // inradius of the unit hexagon — largest circle that fits entirely inside
+        float maxRadius = (float)(Math.Sqrt(3) / 2.0);
+
+        for (int circle = 1; circle <= numberOfCircles; circle++)
+        {
+            // evenly space circle radii from center to the inradius
+            float radius = circle * maxRadius / numberOfCircles;
+
+            // alternate circles are offset by half the angular spacing
+            // so that points on adjacent circles are maximally staggered
+            float angleOffset = (circle % 2 == 0)
+                ? (float)(Math.PI / pointsPerCircle)
+                : 0f;
+
+            for (int p = 0; p < pointsPerCircle; p++)
+            {
+                float angle = angleOffset + p * 2f * (float)Math.PI / pointsPerCircle;
+                float x = radius * (float)Math.Cos(angle) * halfWidth;
+                float y = radius * (float)Math.Sin(angle) * halfHeight;
+                points.Add(new Vec2D(x, y));
             }
         }
 
@@ -146,6 +197,4 @@ public class Hexagon
                Math.Abs(y) <= Math.Sqrt(3) / 2 &&
                Math.Abs(x) + Math.Abs(y) / Math.Sqrt(3) <= 1;
     }
-
-
 }
