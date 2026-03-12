@@ -90,16 +90,19 @@ public sealed class HexagonTests
     {
         int circles = 3;
         int pointsPerCircle = 6;
-        var list = Hexagon.GenerateCircularPoints(circles, pointsPerCircle);
-        // 1 center + 3 circles * 6 points = 19
-        Assert.HasCount(1 + circles * pointsPerCircle, list);
+        var dict = Hexagon.GenerateCircularPoints(circles, pointsPerCircle);
+        // 1 center (key 0) + 3 circle keys = 4 keys total
+        Assert.HasCount(circles + 1, dict);
+        // total points: 1 center + 3 circles * 6 points = 19
+        int totalPoints = dict.Values.Sum(v => v.Count);
+        Assert.AreEqual(1 + circles * pointsPerCircle, totalPoints);
     }
 
     [TestMethod]
     public void GenerateCircularPoints_CenterIsOrigin()
     {
-        var list = Hexagon.GenerateCircularPoints(2, 4);
-        Assert.IsTrue(list[0] == new Vec2D(0, 0));
+        var dict = Hexagon.GenerateCircularPoints(2, 4);
+        Assert.IsTrue(dict[0][0] == new Vec2D(0, 0));
     }
 
     [TestMethod]
@@ -109,16 +112,17 @@ public sealed class HexagonTests
         int pointsPerCircle = 5;
         float halfWidth = 1f;
         float halfHeight = 1f; // use equal scaling so circles stay circular
-        var list = Hexagon.GenerateCircularPoints(circles, pointsPerCircle, halfWidth, halfHeight);
+        var dict = Hexagon.GenerateCircularPoints(circles, pointsPerCircle, halfWidth, halfHeight);
+        var center = dict[0][0];
 
-        for (int c = 0; c < circles; c++)
+        for (int c = 1; c <= circles; c++)
         {
-            int start = 1 + c * pointsPerCircle;
-            float firstDist = list[start].Distance(list[0]);
+            var circlePoints = dict[c];
+            float firstDist = circlePoints[0].Distance(center);
             for (int p = 1; p < pointsPerCircle; p++)
             {
-                float dist = list[start + p].Distance(list[0]);
-                Assert.IsLessThan(0.001f, Math.Abs(dist - firstDist), $"Circle {c + 1}: point {p} distance {dist} differs from first {firstDist}");
+                float dist = circlePoints[p].Distance(center);
+                Assert.IsLessThan(0.001f, Math.Abs(dist - firstDist), $"Circle {c}: point {p} distance {dist} differs from first {firstDist}");
             }
         }
     }
@@ -130,12 +134,13 @@ public sealed class HexagonTests
         int pointsPerCircle = 3;
         float halfWidth = 1f;
         float halfHeight = 1f;
-        var list = Hexagon.GenerateCircularPoints(circles, pointsPerCircle, halfWidth, halfHeight);
+        var dict = Hexagon.GenerateCircularPoints(circles, pointsPerCircle, halfWidth, halfHeight);
+        var c1 = dict[1];
 
         // with equal scaling the 3 points form an equilateral triangle
-        float d01 = list[1].Distance(list[2]);
-        float d12 = list[2].Distance(list[3]);
-        float d20 = list[3].Distance(list[1]);
+        float d01 = c1[0].Distance(c1[1]);
+        float d12 = c1[1].Distance(c1[2]);
+        float d20 = c1[2].Distance(c1[0]);
         Assert.IsLessThan(0.001f, Math.Abs(d01 - d12));
         Assert.IsLessThan(0.001f, Math.Abs(d12 - d20));
     }
@@ -147,13 +152,13 @@ public sealed class HexagonTests
         int pointsPerCircle = 4;
         float halfWidth = 1f;
         float halfHeight = 1f;
-        var list = Hexagon.GenerateCircularPoints(circles, pointsPerCircle, halfWidth, halfHeight);
+        var dict = Hexagon.GenerateCircularPoints(circles, pointsPerCircle, halfWidth, halfHeight);
 
         // circle 1 point 0 angle = 0 => (r1, 0)
         // circle 2 point 0 angle = pi/4 => rotated 45 degrees
         // verify first point of circle 2 is not at the same angle as circle 1
-        var c1p0 = list[1];
-        var c2p0 = list[1 + pointsPerCircle];
+        var c1p0 = dict[1][0];
+        var c2p0 = dict[2][0];
         // angles should differ — dot product of unit vectors should not be 1
         var c1dir = Vec2D.Normalize(c1p0);
         var c2dir = Vec2D.Normalize(c2p0);
@@ -164,8 +169,8 @@ public sealed class HexagonTests
     [TestMethod]
     public void GenerateCircularPoints_ZeroCirclesReturnsCenterOnly()
     {
-        var list = Hexagon.GenerateCircularPoints(0, 5);
-        Assert.HasCount(1, list);
-        Assert.IsTrue(list[0] == new Vec2D(0, 0));
+        var dict = Hexagon.GenerateCircularPoints(0, 5);
+        Assert.HasCount(1, dict);
+        Assert.IsTrue(dict[0][0] == new Vec2D(0, 0));
     }
 }

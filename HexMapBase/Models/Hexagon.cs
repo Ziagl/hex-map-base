@@ -123,21 +123,21 @@ public class Hexagon
 
     /// <summary>
     /// Generates deterministic points arranged in concentric circles inside a stretched hexagon.
-    /// The first point is always the center. Additional points are placed on evenly spaced
-    /// concentric circles. Points on each circle are evenly distributed, and adjacent circles
-    /// are rotated by half the angular spacing to maximize distances between circles.
+    /// The result is grouped by circle number: key 0 contains the center point, keys 1..numberOfCircles
+    /// each contain the evenly spaced points on that circle. Adjacent circles are rotated by half the
+    /// angular spacing to maximize distances between circles.
     /// </summary>
     /// <param name="numberOfCircles">Number of concentric circles around the center.</param>
     /// <param name="pointsPerCircle">Number of evenly spaced points on each circle.</param>
     /// <param name="halfWidth">Half-width of the stretched hexagon (default 1).</param>
     /// <param name="halfHeight">Half-height of the stretched hexagon (default 0.85).</param>
-    /// <returns>A list containing the center point followed by the circle points.</returns>
-    public static List<Vec2D> GenerateCircularPoints(int numberOfCircles, int pointsPerCircle, float halfWidth = 1f, float halfHeight = 0.85f)
+    /// <returns>A dictionary keyed by circle number (0 = center) mapping to the points on that circle.</returns>
+    public static Dictionary<int, List<Vec2D>> GenerateCircularPoints(int numberOfCircles, int pointsPerCircle, float halfWidth = 1f, float halfHeight = 0.85f)
     {
-        var points = new List<Vec2D>(1 + numberOfCircles * pointsPerCircle);
+        var result = new Dictionary<int, List<Vec2D>>(1 + numberOfCircles);
 
         // center point
-        points.Add(new Vec2D(0, 0));
+        result[0] = [new Vec2D(0, 0)];
 
         // inradius of the unit hexagon — largest circle that fits entirely inside
         float maxRadius = (float)(Math.Sqrt(3) / 2.0);
@@ -153,16 +153,18 @@ public class Hexagon
                 ? (float)(Math.PI / pointsPerCircle)
                 : 0f;
 
+            var circlePoints = new List<Vec2D>(pointsPerCircle);
             for (int p = 0; p < pointsPerCircle; p++)
             {
                 float angle = angleOffset + p * 2f * (float)Math.PI / pointsPerCircle;
                 float x = radius * (float)Math.Cos(angle) * halfWidth;
                 float y = radius * (float)Math.Sin(angle) * halfHeight;
-                points.Add(new Vec2D(x, y));
+                circlePoints.Add(new Vec2D(x, y));
             }
+            result[circle] = circlePoints;
         }
 
-        return points;
+        return result;
     }
 
     private static bool IsFarEnough(Vec2D point, List<Vec2D> points, float minDistance)
