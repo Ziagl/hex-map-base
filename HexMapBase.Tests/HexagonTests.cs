@@ -173,4 +173,66 @@ public sealed class HexagonTests
         Assert.HasCount(1, dict);
         Assert.IsTrue(dict[0][0] == new Vec2D(0, 0));
     }
+
+    [TestMethod]
+    public void GenerateCircularPoints_Dynamic_CorrectKeys()
+    {
+        int circles = 3;
+        var dict = Hexagon.GenerateCircularPoints(circles, 0.3f);
+        Assert.HasCount(circles + 1, dict);
+        for (int i = 0; i <= circles; i++)
+            Assert.IsTrue(dict.ContainsKey(i));
+    }
+
+    [TestMethod]
+    public void GenerateCircularPoints_Dynamic_CenterIsOrigin()
+    {
+        var dict = Hexagon.GenerateCircularPoints(2, 0.3f);
+        Assert.HasCount(1, dict[0]);
+        Assert.IsTrue(dict[0][0] == new Vec2D(0, 0));
+    }
+
+    [TestMethod]
+    public void GenerateCircularPoints_Dynamic_MinDistanceRespected()
+    {
+        float minDistance = 0.2f;
+        var dict = Hexagon.GenerateCircularPoints(3, minDistance, seed: 42);
+        var allPoints = dict.Values.SelectMany(v => v).ToList();
+        for (int i = 0; i < allPoints.Count; i++)
+        {
+            for (int j = i + 1; j < allPoints.Count; j++)
+            {
+                Assert.IsGreaterThanOrEqualTo(minDistance, allPoints[i].Distance(allPoints[j]));
+            }
+        }
+    }
+
+    [TestMethod]
+    public void GenerateCircularPoints_Dynamic_Reproducible()
+    {
+        int seed = 42;
+        float minDistance = 0.2f;
+        var dict1 = Hexagon.GenerateCircularPoints(2, minDistance, seed: seed);
+        var dict2 = Hexagon.GenerateCircularPoints(2, minDistance, seed: seed);
+        Assert.HasCount(dict1.Count, dict2);
+        foreach (var key in dict1.Keys)
+        {
+            Assert.HasCount(dict1[key].Count, dict2[key]);
+            for (int i = 0; i < dict1[key].Count; i++)
+                Assert.IsTrue(dict1[key][i] == dict2[key][i]);
+        }
+    }
+
+    [TestMethod]
+    public void GenerateCircularPoints_Dynamic_InvalidArguments()
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(() => Hexagon.GenerateCircularPoints(0, 0.3f));
+        Assert.Throws<ArgumentOutOfRangeException>(() => Hexagon.GenerateCircularPoints(-1, 0.3f));
+        Assert.Throws<ArgumentOutOfRangeException>(() => Hexagon.GenerateCircularPoints(1, 0f));
+        Assert.Throws<ArgumentOutOfRangeException>(() => Hexagon.GenerateCircularPoints(1, -0.1f));
+        Assert.Throws<ArgumentOutOfRangeException>(() => Hexagon.GenerateCircularPoints(1, 0.3f, halfWidth: 0f));
+        Assert.Throws<ArgumentOutOfRangeException>(() => Hexagon.GenerateCircularPoints(1, 0.3f, halfWidth: -1f));
+        Assert.Throws<ArgumentOutOfRangeException>(() => Hexagon.GenerateCircularPoints(1, 0.3f, halfHeight: 0f));
+        Assert.Throws<ArgumentOutOfRangeException>(() => Hexagon.GenerateCircularPoints(1, 0.3f, halfHeight: -1f));
+    }
 }

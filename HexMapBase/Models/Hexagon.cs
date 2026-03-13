@@ -167,6 +167,96 @@ public class Hexagon
         return result;
     }
 
+    /// <summary>
+    /// Generates dynamically distributed points arranged in concentric circle bands inside a stretched hexagon.
+    /// The result is grouped by circle number: key 0 contains the center point, keys 1..numberOfCircles
+    /// contain randomly distributed points in the corresponding ring band.
+    ///
+    /// Distances between all generated points are globally constrained to be at least <paramref name="minDistance"/>.
+    /// The outermost ring is limited to 80% of the maximum inscribed radius so points keep a 20% margin to the border.
+    /// If constraints are too strict, the method returns a best-effort result with fewer points in affected rings.
+    /// </summary>
+    /// <param name="numberOfCircles">Number of concentric circles around the center (excluding center key 0).</param>
+    /// <param name="minDistance">Minimal Euclidean distance all generated points must keep to each other.</param>
+    /// <param name="halfWidth">Half-width of the stretched hexagon (default 1).</param>
+    /// <param name="halfHeight">Half-height of the stretched hexagon (default 0.85).</param>
+    /// <param name="seed">Optional random seed for reproducible point generation.</param>
+    /// <returns>A dictionary keyed by circle number (0 = center) mapping to generated points for each circle.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if input values are outside valid ranges.</exception>
+    public static Dictionary<int, List<Vec2D>> GenerateCircularPoints(int numberOfCircles, float minDistance, float halfWidth = 1f, float halfHeight = 0.85f, int? seed = null)
+    {
+        if (numberOfCircles < 1)
+        {
+            throw new ArgumentOutOfRangeException(nameof(numberOfCircles), "numberOfCircles must be greater than or equal to 1.");
+        }
+
+        if (minDistance <= 0f)
+        {
+            throw new ArgumentOutOfRangeException(nameof(minDistance), "minDistance must be greater than 0.");
+        }
+
+        if (halfWidth <= 0f)
+        {
+            throw new ArgumentOutOfRangeException(nameof(halfWidth), "halfWidth must be greater than 0.");
+        }
+
+        if (halfHeight <= 0f)
+        {
+            throw new ArgumentOutOfRangeException(nameof(halfHeight), "halfHeight must be greater than 0.");
+        }
+        
+        var result = new Dictionary<int, List<Vec2D>>(1 + numberOfCircles);
+        var allPoints = new List<Vec2D>(64);
+        var rand = seed.HasValue ? new Random(seed.Value) : new Random();
+
+        var center = new Vec2D(0, 0);
+        result[0] = [center];
+        allPoints.Add(center);
+
+        float maxRadius = (float)(Math.Sqrt(3) / 2.0);
+        float maxUsableRadius = maxRadius * 0.8f;
+        float ringStep = maxUsableRadius / numberOfCircles;
+
+        for (int circle = 1; circle <= numberOfCircles; circle++)
+        {
+            float centerRadius = circle * ringStep;
+            float innerRadius = circle == 1 ? 0f : centerRadius - ringStep * 0.5f;
+            float outerRadius = circle == numberOfCircles ? maxUsableRadius : centerRadius + ringStep * 0.5f;
+
+            float averageScale = (halfWidth + halfHeight) * 0.5f;
+            float effectiveRadius = centerRadius * averageScale;
+            int estimatedCount = (int)MathF.Ceiling((2f * MathF.PI * MathF.Max(effectiveRadius, minDistance)) / minDistance);
+            int targetCount = Math.Max(1, estimatedCount);
+
+            int maxAttempts = Math.Max(200, targetCount * 80);
+            int attempts = 0;
+
+            var circlePoints = new List<Vec2D>(targetCount);
+
+            while (circlePoints.Count < targetCount && attempts < maxAttempts)
+            {
+                attempts++;
+
+                float angle = (float)(rand.NextDouble() * 2.0 * Math.PI);
+                float radius = SampleRadiusInAnnulus(innerRadius, outerRadius, rand);
+
+                float x = radius * (float)Math.Cos(angle) * halfWidth;
+                float y = radius * (float)Math.Sin(angle) * halfHeight;
+                var candidate = new Vec2D(x, y);
+
+                if (IsFarEnough(candidate, allPoints, minDistance))
+                {
+                    circlePoints.Add(candidate);
+                    allPoints.Add(candidate);
+                }
+            }
+
+            result[circle] = circlePoints;
+        }
+
+        return result;
+    }
+
     private static bool IsFarEnough(Vec2D point, List<Vec2D> points, float minDistance)
     {
         foreach (var p in points)
@@ -175,6 +265,17 @@ public class Hexagon
                 return false;
         }
         return true;
+    }
+
+    private static float SampleRadiusInAnnulus(float innerRadius, float outerRadius, Random rand)
+    {
+        if (outerRadius <= innerRadius)
+            return innerRadius;
+
+        float innerSquared = innerRadius * innerRadius;
+        float outerSquared = outerRadius * outerRadius;
+        float t = (float)rand.NextDouble();
+        return MathF.Sqrt(innerSquared + t * (outerSquared - innerSquared));
     }
 
     // generates a uniformly distributed point inside a regular hexagon of radius 1
